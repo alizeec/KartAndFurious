@@ -1,0 +1,71 @@
+
+/**
+ * Structure de code pour :
+ * charger un modèle 3D de véhicule et l'envoyer dans la carte graphique
+ * charger un circuit 3D et l'envoyer dans la carte graphique (même principe)
+ * afficher le véhicule à sa bonne position ainsi que la map
+  * pseudo code dans c'est juste pour montrer l'idée
+ * c'est un peu dégueu niveau design objet mais c'est pour donner une base
+  */
+int main()
+{
+	Mesh circuit;//Mesh = objet 3D créé sous Maya ou blender
+	circuit.loadFromFile("circuit.obj");
+	Mesh kart;
+	kart.loadFromFile("kart.obj");
+	Kart kartDuJoueur;
+
+	//Boucle de jeu
+	do
+	{
+		//Affichage
+		circuit.display();
+		kart.display();//Va chercher sa position et son orientation dans kartDuJoueur
+
+		//Jeu
+		kartDuJoueur.updatePosition();
+
+		//Evenements clavier en vrai faut faire un switch sur les evenements sfml
+		if (press fleche haut)
+			kart.avance();
+		else if (press fleche bas)
+			kart.recule();
+		...
+		else if (release fleche haut)
+			kart.stopAvance();
+
+	}while(true);
+}
+
+class Kart
+{
+public:
+	avance();
+	recule();
+	tourneGauche();
+	tourneDroite();
+	stopAvance();
+	stopTourne();
+
+	glm::vec3 getPosition();
+private:
+	float vitesse;
+	float vitesseRotation;
+	glm::vec3 position;
+	glm::vec3 orientation;
+	...
+};
+
+class Mesh
+{
+public:
+	Mesh();
+	~Mesh();
+	loadFromFile(...);
+	display();
+
+private:	
+	VBO;
+	VAO;
+	Program;
+};
