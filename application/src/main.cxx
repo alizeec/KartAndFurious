@@ -8,8 +8,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 int main() {
-  const size_t WINDOW_WIDTH = 800;
-  const size_t WINDOW_HEIGHT = 600;
+  const size_t WINDOW_WIDTH = 1024;
+  const size_t WINDOW_HEIGHT = 768;
 
   //------------- INITIALISATION ---------------------
   //Création de la fenetre et initialisation de GLEW
@@ -66,7 +66,7 @@ int main() {
     kart3D.afficher(shaderProgram);
 
     //La caméra est pour l'instant fixe
-    glm::mat4 camera =  glm::lookAt(glm::vec3(0.f, 2.f, 1.f), glm::vec3(0.f,0.f,0.f), glm::vec3(0.f, 1.f, 0.f));
+    glm::mat4 camera =  glm::lookAt(glm::vec3(0.f, 2.5f, 2.5f), glm::vec3(0.f,0.f,0.f), glm::vec3(0.f, 1.f, 0.f));
     //Le projeté 2D de la caméra (matrice de projection)
     glm::mat4 cameraProjetee =  glm::perspective(90.f, WINDOW_WIDTH / (float) WINDOW_HEIGHT, 0.1f, 1000.f) * camera;
 
