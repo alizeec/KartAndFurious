@@ -107,6 +107,9 @@ int main() {
             else if (e.key.code == sf::Keyboard::Right)
                 kartDuJoueur.tourneADroite();
 
+            else if (e.key.code == sf::Keyboard::Space)
+              kartDuJoueur.freiner();
+
             break;
         case sf::Event::KeyReleased:
             if (e.key.code == sf::Keyboard::Down)

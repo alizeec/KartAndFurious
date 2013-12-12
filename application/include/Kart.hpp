@@ -18,6 +18,27 @@
 class Kart
 {
 public:
+  //Indique si le Kart est actuellement en phase d'acceleration ou de deceleration
+  enum StatutAcceleration
+  {
+    ACCELERE,
+    DECELERE,
+    VITESSE_MAX_ATTEINTE,
+    NE_BOUGE_PAS
+  };
+
+  //Structure qui empacte les caractéristiques du Kart
+  struct Specifications
+  {
+    Specifications()
+      : acceleration(4.f), vitesseMax(20.f), vitesseAngulaire(90.f), coefficientFreinage(-1.5f) {}
+
+    float acceleration;
+    float vitesseMax;
+    float vitesseAngulaire;
+    float coefficientFreinage;
+  };
+
   Kart();
   Kart(glm::vec3 position, glm::quat direction, float speed);
   virtual ~Kart();
@@ -41,6 +62,8 @@ public:
   //Met à zéro vitesseAngulaire
   void stopTourner();
 
+  void freiner();
+
   const glm::vec3& getPosition() const;
   const glm::quat& getOrientation() const;
 
@@ -49,8 +72,11 @@ private:
   glm::quat orientation;
   float angleDirection;
   float vitesse;
-  float vitesseAngulaire;
-  sf::Time lastmove;
+  float vitesseAngulaireCourante;
+  float accelerationCourante;
+
+  StatutAcceleration accelerationStatut;
+  Specifications specifications;
 };
 
 #endif
