@@ -22,7 +22,7 @@ void Kart::mettreAJour(sf::Time elapsed)
 {
   //Calcul de la nouvelle direction en fonction de l'angularSpeed
   angleDirection += vitesseAngulaire*elapsed.asSeconds(); //ajouter gestion temps
-  std::cout << vitesseAngulaire/elapsed.asSeconds() << std::endl;
+  //std::cout << vitesseAngulaire/elapsed.asSeconds() << std::endl;
   // création d'un quaternion (matrice de rotation mais en mieux) avec l'angle en fonction de l'axe y
   orientation = glm::angleAxis(angleDirection, glm::vec3(0.f, 1.f, 0.f));
   // récupération de la position initiale,à faire gaffe quand on importera des mesh

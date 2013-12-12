@@ -26,9 +26,9 @@ int main() {
 
   //Chargement des données 3D (pour l'instant ça marche pas, vos Mesh sont tous des cubes de taille 1)
   Mesh circuit3D;
-  circuit3D.loadFromFile("...");
+  //circuit3D.loadFromFile("...");
   Mesh kart3D;
-  kart3D.loadFromFile("...");
+  kart3D.loadFromFile("data/Bouboule.dae");
 
   //Création du Kart "logique" qui va contenir le code de déplacement
   Kart kartDuJoueur;
@@ -47,8 +47,6 @@ int main() {
   shaderProgram.use();
 
   sf::Clock clock;
-
-
   //--------- BOUCLE DE JEU ---------------
   bool demandeAQuitter = false;
   do
@@ -85,7 +83,6 @@ int main() {
 
     sf::Time elapsed = clock.restart();
     kartDuJoueur.mettreAJour(elapsed);
-
 
     //Gestion du clavier
     sf::Event e;
