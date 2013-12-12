@@ -94,6 +94,9 @@ void Kart::tourneADroite(){
 
 void Kart::stopAvancer()
 {
+  //Si on est deja en train de decelerer, rien a faire
+  if (accelerationStatut == DECELERE)
+    return;
   accelerationCourante = -accelerationCourante;
   accelerationStatut = DECELERE;
 }
@@ -106,8 +109,17 @@ void Kart::stopTourner()
 //Le freinage est juste une deceleration plus puissante pour l'instant
 void Kart::freiner()
 {
-  accelerationStatut = DECELERE;
-  accelerationCourante = specifications.coefficientFreinage * accelerationCourante;
+  //Si on est deja en train de decelerer il faut juste augmenter l'acceleration courante
+  if (accelerationStatut == DECELERE)
+  {
+    accelerationCourante = specifications.coefficientFreinage * accelerationCourante;
+  }
+  //Sinon il faut carrement prendre son oppose
+  else
+  {
+    accelerationStatut = DECELERE;
+    accelerationCourante = - specifications.coefficientFreinage * accelerationCourante;
+  }
 }
 
 const glm::vec3& Kart::getPosition() const
