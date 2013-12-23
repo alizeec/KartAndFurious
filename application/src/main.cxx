@@ -3,9 +3,17 @@
 #include <iostream>
 #include <cstdlib>
 #include <time.h>
+#include <vector>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include "Mesh.hpp"
 #include "Kart.hpp"
+#include "VBO.hpp"
+#include "VAO.hpp"
+
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
 
 int main() {
   const size_t WINDOW_WIDTH = 1024;
@@ -22,6 +30,10 @@ int main() {
   }
   //On active le test de profondeur dans OpenGL
   glEnable(GL_DEPTH_TEST);
+
+
+
+
 
 
   //Chargement des données 3D (pour l'instant ça marche pas, vos Mesh sont tous des cubes de taille 1)
@@ -46,7 +58,13 @@ int main() {
   }
   shaderProgram.use();
 
+  const glm::vec3 initialDirection=glm::vec3(0.f,0.f,-1.f);
+
+
   sf::Clock clock;
+
+
+
   //--------- BOUCLE DE JEU ---------------
   bool demandeAQuitter = false;
   do
@@ -55,24 +73,38 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //On affiche le circuit (pas encore parce que c'est pas pret)
+
     //circuit3D.afficher(shaderProgram);
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMatrixMode(GL_MODELVIEW);
 
     //On met à jour la position et l'orientation du modèle 3D
     //par rapport au Kart "logique" qui gère le déplacement
     kart3D.setPositionEtOrientation(kartDuJoueur.getPosition(), kartDuJoueur.getOrientation());
-;
+
+
     //Enfin on affiche le Kart 3D (un cube pour l'instant)
     //C'est lui qui se charge d'envoyer la bonne matrice modele au shaderProgram
     kart3D.afficher(shaderProgram);
 
     //La caméra est pour l'instant fixe
-    glm::mat4 camera =  glm::lookAt(glm::vec3(0.f, 2.5f, 2.5f), glm::vec3(0.f,0.f,0.f), glm::vec3(0.f, 1.f, 0.f));
+
+    glm::vec3 cameraPosition = kartDuJoueur.getPosition()+ glm::vec3(0.f,2.f,0.f)+ glm::toMat3(kartDuJoueur.getOrientation())* initialDirection;
+    glm::vec3 cameraDirection= kartDuJoueur.getPosition() ;
+
+
+
+    glm::mat4 camera = glm::lookAt(cameraPosition,cameraDirection, glm::vec3(0.f,1.f, 0.f));
+   /*glm::mat4 camera = glm::lookAt(glm::vec3(0.f, 2.5f, 2.5f), glm::vec3(0.f,0.f,0.f), glm::vec3(0.f, 1.f, 0.f));*/
+
     //Le projeté 2D de la caméra (matrice de projection)
     glm::mat4 cameraProjetee =  glm::perspective(90.f, WINDOW_WIDTH / (float) WINDOW_HEIGHT, 0.1f, 1000.f) * camera;
 
     //On balance ça au shader !
     GLint viewProjectionIndex = shaderProgram.getUniformIndex("viewProjection");
     shaderProgram.setUniform(viewProjectionIndex, cameraProjetee);
+
 
 
     //-------------- CODE "APPLICATIF"(la logique du jeu quoi, + gestion des évènements) ----------
@@ -123,6 +155,7 @@ int main() {
 
             else if (e.key.code == sf::Keyboard::Right)
                 kartDuJoueur.stopTourner();
+
             break;
         default:
           break;
