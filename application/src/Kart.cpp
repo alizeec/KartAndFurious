@@ -123,7 +123,8 @@ void Kart::freiner()
 }
 
 const glm::vec3& Kart::getPosition() const
-  {return position;}
+  {
+    return position;}
 
 const glm::quat& Kart::getOrientation() const
   {return orientation;}

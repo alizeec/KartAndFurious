@@ -146,4 +146,3 @@ void Mesh::setPositionEtOrientation(const glm::vec3& position, const glm::quat& 
   modelMatrix = glm::translate(glm::mat4(1.f), position) * modelMatrix;
 }
 
-

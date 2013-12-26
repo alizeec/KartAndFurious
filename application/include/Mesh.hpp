@@ -8,6 +8,7 @@
 #include <string>
 #include <ShaderProgram.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include <Vertex3D.hpp>
 
 class Mesh
 {
@@ -45,5 +46,8 @@ private:
   std::vector<std::vector<unsigned int>> indices;
 
 };
+
+
+
 
 #endif // MESH_HPP

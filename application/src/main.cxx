@@ -38,9 +38,9 @@ int main() {
 
   //Chargement des données 3D (pour l'instant ça marche pas, vos Mesh sont tous des cubes de taille 1)
   Mesh circuit3D;
-  //circuit3D.loadFromFile("...");
+  circuit3D.loadFromFile("data/SnowTerrain.dae");
   Mesh kart3D;
-  kart3D.loadFromFile("data/Bouboule.dae");
+  kart3D.loadFromFile("data/tuning.dae");
 
   //Création du Kart "logique" qui va contenir le code de déplacement
   Kart kartDuJoueur;
@@ -58,7 +58,7 @@ int main() {
   }
   shaderProgram.use();
 
-  const glm::vec3 initialDirection=glm::vec3(0.f,0.f,-1.f);
+  const glm::vec3 initialDirection=glm::vec3(0.f,0.f,10.f);
 
 
   sf::Clock clock;
@@ -77,7 +77,12 @@ int main() {
     //circuit3D.afficher(shaderProgram);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+
     glMatrixMode(GL_MODELVIEW);
+
+
 
     //On met à jour la position et l'orientation du modèle 3D
     //par rapport au Kart "logique" qui gère le déplacement
@@ -87,10 +92,12 @@ int main() {
     //Enfin on affiche le Kart 3D (un cube pour l'instant)
     //C'est lui qui se charge d'envoyer la bonne matrice modele au shaderProgram
     kart3D.afficher(shaderProgram);
+    circuit3D.afficher(shaderProgram);
+
 
     //La caméra est pour l'instant fixe
 
-    glm::vec3 cameraPosition = kartDuJoueur.getPosition()+ glm::vec3(0.f,2.f,0.f)+ glm::toMat3(kartDuJoueur.getOrientation())* initialDirection;
+    glm::vec3 cameraPosition = kartDuJoueur.getPosition()+ glm::vec3(0.f,10.f,0.f)+ glm::toMat3(kartDuJoueur.getOrientation())* initialDirection;
     glm::vec3 cameraDirection= kartDuJoueur.getPosition() ;
 
 
