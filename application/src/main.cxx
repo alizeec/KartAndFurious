@@ -26,6 +26,8 @@ int main() {
 
   //Chargement des données 3D (pour l'instant ça marche pas, vos Mesh sont tous des cubes de taille 1)
   Mesh circuit3D;
+  circuit3D.loadFromFile("data/SnowTerrain.dae");
+
   //circuit3D.loadFromFile("...");
   Mesh kart3D;
   kart3D.loadFromFile("data/Bouboule.dae");
@@ -46,6 +48,8 @@ int main() {
   }
   shaderProgram.use();
 
+  const glm::vec3 initialDirection=glm::vec3(0.f,0.f,6.f);
+
   sf::Clock clock;
   //--------- BOUCLE DE JEU ---------------
   bool demandeAQuitter = false;
@@ -64,9 +68,17 @@ int main() {
     //Enfin on affiche le Kart 3D (un cube pour l'instant)
     //C'est lui qui se charge d'envoyer la bonne matrice modele au shaderProgram
     kart3D.afficher(shaderProgram);
+    circuit3D.afficher(shaderProgram);
+
 
     //La caméra est pour l'instant fixe
-    glm::mat4 camera =  glm::lookAt(glm::vec3(0.f, 2.5f, 2.5f), glm::vec3(0.f,0.f,0.f), glm::vec3(0.f, 1.f, 0.f));
+
+    glm::vec3 cameraPosition = kartDuJoueur.getPosition()+ glm::vec3(0.f,6.f,0.f)+ glm::toMat3(kartDuJoueur.getOrientation())* initialDirection;
+    glm::vec3 cameraDirection= kartDuJoueur.getPosition() ;
+
+
+
+    glm::mat4 camera = glm::lookAt(cameraPosition,cameraDirection, glm::vec3(0.f,1.f, 0.f));
     //Le projeté 2D de la caméra (matrice de projection)
     glm::mat4 cameraProjetee =  glm::perspective(90.f, WINDOW_WIDTH / (float) WINDOW_HEIGHT, 0.1f, 1000.f) * camera;
 
