@@ -28,7 +28,7 @@ int main() {
   Mesh circuit3D;
   //circuit3D.loadFromFile("...");
   Mesh kart3D;
-  kart3D.loadFromFile("data/Bouboule.dae");
+  kart3D.loadFromFile("application/data/Bouboule.dae");
 
   //Création du Kart "logique" qui va contenir le code de déplacement
   Kart kartDuJoueur;
@@ -37,8 +37,8 @@ int main() {
   // tard pour la gestion des textures entre autres)
   glimac::ShaderProgram shaderProgram;
   std::string logInfo;
-  shaderProgram.addShader(GL_VERTEX_SHADER, "shaders/Simple3DVS.glsl");
-  shaderProgram.addShader(GL_FRAGMENT_SHADER, "shaders/SimpleFS.glsl");
+  shaderProgram.addShader(GL_VERTEX_SHADER, "application/shaders/Simple3DVS.glsl");
+  shaderProgram.addShader(GL_FRAGMENT_SHADER, "application/shaders/SimpleFS.glsl");
   if (!shaderProgram.compileAndLinkShaders(logInfo))
   {
     std::cerr << logInfo << std::endl;
