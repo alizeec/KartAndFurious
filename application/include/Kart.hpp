@@ -31,7 +31,7 @@ public:
   struct Specifications
   {
     Specifications()
-      : acceleration(4.f), vitesseMax(20.f), vitesseAngulaire(90.f), coefficientFreinage(1.5f) {}
+      : acceleration(7.f), vitesseMax(20.f), vitesseAngulaire(90.f), coefficientFreinage(0.5f) {}
 
     ///Doit etre positive
     float acceleration;

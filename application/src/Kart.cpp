@@ -97,7 +97,7 @@ void Kart::stopAvancer()
   //Si on est deja en train de decelerer, rien a faire
   if (accelerationStatut == DECELERE)
     return;
-  accelerationCourante = -accelerationCourante;
+  accelerationCourante = -5*accelerationCourante;
   accelerationStatut = DECELERE;
 }
 

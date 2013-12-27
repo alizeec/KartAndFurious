@@ -5,6 +5,9 @@
 #include <time.h>
 #include "Mesh.hpp"
 #include "Kart.hpp"
+#include "Texture.hpp"
+#include "VAO.hpp"
+#include "VBO.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 int main() {
@@ -24,15 +27,25 @@ int main() {
   glEnable(GL_DEPTH_TEST);
 
 
-  //Chargement des données 3D (pour l'instant ça marche pas, vos Mesh sont tous des cubes de taille 1)
+
+
+  //Chargement des données 3D
   Mesh circuit3D;
-  circuit3D.loadFromFile("application/data/SnowTerrain.dae");
+  circuit3D.loadFromFile("data/circuit.dae");
 
   Mesh kart3D;
-  kart3D.loadFromFile("application/data/Bouboule.dae");
+  kart3D.loadFromFile("data/NYPD_Ford_Mondeo.dae");
 
   Mesh kart3D_IA1;
-  kart3D_IA1.loadFromFile("application/data/Bouboule.dae");
+  kart3D_IA1.loadFromFile("data/Bouboule.dae");
+
+
+
+
+
+
+
+
 
   //Création du Kart "logique" qui va contenir le code de déplacement
   Kart kartDuJoueur;
@@ -41,11 +54,12 @@ int main() {
   //Création des kart des autres joueurs (IA)
   Kart IA1;
   //On créé les ShaderProgram de base (le code des shaders est a regarder et devra etre modifie plus
-  // tard pour la gestion des textures entre autres)
-  glimac::ShaderProgram shaderProgram;
+  // tard pour la gestion des textures entre autres
+
+ glimac::ShaderProgram shaderProgram;
   std::string logInfo;
-  shaderProgram.addShader(GL_VERTEX_SHADER, "application/shaders/Simple3DVS.glsl");
-  shaderProgram.addShader(GL_FRAGMENT_SHADER, "application/shaders/SimpleFS.glsl");
+  shaderProgram.addShader(GL_VERTEX_SHADER, "shaders/Simple3DVS.glsl");
+  shaderProgram.addShader(GL_FRAGMENT_SHADER, "shaders/SimpleFS.glsl");
   if (!shaderProgram.compileAndLinkShaders(logInfo))
   {
     std::cerr << logInfo << std::endl;
@@ -53,9 +67,14 @@ int main() {
   }
   shaderProgram.use();
 
+
   const glm::vec3 initialDirection=glm::vec3(0.f,0.f,6.f);
 
   sf::Clock clock;
+
+
+
+
   //--------- BOUCLE DE JEU ---------------
   bool demandeAQuitter = false;
   do
@@ -65,6 +84,10 @@ int main() {
 
     //On affiche le circuit (pas encore parce que c'est pas pret)
     //circuit3D.afficher(shaderProgram);
+    circuit3D.afficher(shaderProgram);
+
+
+
 
     //On met à jour la position et l'orientation du modèle 3D
     //par rapport au Kart "logique" qui gère le déplacement
@@ -74,8 +97,8 @@ int main() {
     //Enfin on affiche le Kart 3D
     //C'est lui qui se charge d'envoyer la bonne matrice modele au shaderProgram
     kart3D.afficher(shaderProgram);
+
     kart3D_IA1.afficher(shaderProgram);
-    circuit3D.afficher(shaderProgram);
 
 
     //La caméra est pour l'instant fixe

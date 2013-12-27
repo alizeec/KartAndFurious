@@ -24,6 +24,7 @@ public:
   ~Mesh();
   void loadFromFile(const std::string& cheminFichier);
 
+
   void mettreAJour();
   void afficher(const glimac::ShaderProgram& shaderProgram) const;
 
