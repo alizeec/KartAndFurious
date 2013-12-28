@@ -128,3 +128,4 @@ const glm::vec3& Kart::getPosition() const
 const glm::quat& Kart::getOrientation() const
   {return orientation;}
 
+

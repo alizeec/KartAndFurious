@@ -26,23 +26,20 @@ int main() {
   //On active le test de profondeur dans OpenGL
   glEnable(GL_DEPTH_TEST);
 
-
-
+  //chargement de la texture
+    glimac::Texture texture(GL_TEXTURE_2D);
+    texture.loadTexture2D("data/fond-bois.jpg");
 
   //Chargement des données 3D
   Mesh circuit3D;
   circuit3D.loadFromFile("data/circuit.dae");
 
+
   Mesh kart3D;
-  kart3D.loadFromFile("data/NYPD_Ford_Mondeo.dae");
+  kart3D.loadFromFile("data/boule3.DAE");
 
   Mesh kart3D_IA1;
   kart3D_IA1.loadFromFile("data/Bouboule.dae");
-
-
-
-
-
 
 
 
@@ -57,16 +54,17 @@ int main() {
   // tard pour la gestion des textures entre autres
 
  glimac::ShaderProgram shaderProgram;
-  std::string logInfo;
-  shaderProgram.addShader(GL_VERTEX_SHADER, "shaders/Simple3DVS.glsl");
-  shaderProgram.addShader(GL_FRAGMENT_SHADER, "shaders/SimpleFS.glsl");
-  if (!shaderProgram.compileAndLinkShaders(logInfo))
+  std::string logInfo2;
+  shaderProgram.addShader(GL_VERTEX_SHADER, "shaders/textureVS.glsl");
+  shaderProgram.addShader(GL_FRAGMENT_SHADER, "shaders/textureFS.glsl");
+  if (!shaderProgram.compileAndLinkShaders(logInfo2))
   {
-    std::cerr << logInfo << std::endl;
+    std::cerr << logInfo2 << std::endl;
     return EXIT_FAILURE;
   }
   shaderProgram.use();
 
+  GLint locationtex = shaderProgram.getUniformIndex("uTexture");
 
   const glm::vec3 initialDirection=glm::vec3(0.f,0.f,6.f);
 
@@ -84,7 +82,6 @@ int main() {
 
     //On affiche le circuit (pas encore parce que c'est pas pret)
     //circuit3D.afficher(shaderProgram);
-    circuit3D.afficher(shaderProgram);
 
 
 
@@ -96,9 +93,15 @@ int main() {
 ;
     //Enfin on affiche le Kart 3D
     //C'est lui qui se charge d'envoyer la bonne matrice modele au shaderProgram
-    kart3D.afficher(shaderProgram);
+
+    texture.bind();
+            glUniform1i(locationtex, 0);
+   kart3D.afficher(shaderProgram);
+   texture.unbind();
+
 
     kart3D_IA1.afficher(shaderProgram);
+   circuit3D.afficher(shaderProgram);
 
 
     //La caméra est pour l'instant fixe

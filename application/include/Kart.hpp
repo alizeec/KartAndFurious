@@ -47,6 +47,8 @@ public:
   Kart(glm::vec3 position, glm::quat direction, float speed);
   virtual ~Kart();
 
+
+
   //Met à jour le Kart en fonction de sa vitesse, sa vitesse angulaire
   //sa position actuelle et son orientation actuelle
   void mettreAJour(sf::Time elapsedTimeInSecond);
