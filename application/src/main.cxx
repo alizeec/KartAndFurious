@@ -8,6 +8,8 @@
 #include "Texture.hpp"
 #include "VAO.hpp"
 #include "VBO.hpp"
+#include "initGraphique.hpp"
+
 #include <glm/gtc/matrix_transform.hpp>
 
 int main() {
@@ -27,19 +29,10 @@ int main() {
   glEnable(GL_DEPTH_TEST);
 
   //chargement de la texture
-    glimac::Texture texture(GL_TEXTURE_2D);
-    texture.loadTexture2D("data/fond-bois.jpg");
-
-  //Chargement des données 3D
-  Mesh circuit3D;
-  circuit3D.loadFromFile("data/circuit.dae");
-
-
-  Mesh kart3D;
-  kart3D.loadFromFile("data/boule3.DAE");
-
-  Mesh kart3D_IA1;
-  kart3D_IA1.loadFromFile("data/Bouboule.dae");
+    /*glimac::Texture texture(GL_TEXTURE_2D);
+    texture.loadTexture2D("data/fond-bois.jpg");*/
+ worldGraphique world3D;
+  world3D.initGraphisme();
 
 
 
@@ -55,8 +48,8 @@ int main() {
 
  glimac::ShaderProgram shaderProgram;
   std::string logInfo2;
-  shaderProgram.addShader(GL_VERTEX_SHADER, "shaders/textureVS.glsl");
-  shaderProgram.addShader(GL_FRAGMENT_SHADER, "shaders/textureFS.glsl");
+  shaderProgram.addShader(GL_VERTEX_SHADER, "shaders/Simple3DVS.glsl");
+  shaderProgram.addShader(GL_FRAGMENT_SHADER, "shaders/SimpleFS.glsl");
   if (!shaderProgram.compileAndLinkShaders(logInfo2))
   {
     std::cerr << logInfo2 << std::endl;
@@ -64,7 +57,7 @@ int main() {
   }
   shaderProgram.use();
 
-  GLint locationtex = shaderProgram.getUniformIndex("uTexture");
+  //GLint locationtex = shaderProgram.getUniformIndex("uTexture");
 
   const glm::vec3 initialDirection=glm::vec3(0.f,0.f,6.f);
 
@@ -80,28 +73,20 @@ int main() {
     //-----------------RENDU 3D-----------------------
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //On affiche le circuit (pas encore parce que c'est pas pret)
-    //circuit3D.afficher(shaderProgram);
-
-
+    //On affiche le circuit
+    world3D.listeMesh[0]->afficher(shaderProgram);
 
 
     //On met à jour la position et l'orientation du modèle 3D
     //par rapport au Kart "logique" qui gère le déplacement
-    kart3D.setPositionEtOrientation(kartDuJoueur.getPosition(), kartDuJoueur.getOrientation());
-    kart3D_IA1.setPositionEtOrientation(IA1.getPosition()+glm::vec3(6.f,0.f,0.f), IA1.getOrientation());
-;
-    //Enfin on affiche le Kart 3D
+    world3D.updatePositionKarts(kartDuJoueur, IA1);
+
+
+
+    //Enfin on affiche le Kart 3D du joueur et les IA
     //C'est lui qui se charge d'envoyer la bonne matrice modele au shaderProgram
-
-    texture.bind();
-            glUniform1i(locationtex, 0);
-   kart3D.afficher(shaderProgram);
-   texture.unbind();
-
-
-    kart3D_IA1.afficher(shaderProgram);
-   circuit3D.afficher(shaderProgram);
+    world3D.listeMesh[1]->afficher(shaderProgram);
+    world3D.listeMesh[2]->afficher(shaderProgram);
 
 
     //La caméra est pour l'instant fixe
@@ -180,5 +165,6 @@ int main() {
     window.display();
   } while (!demandeAQuitter);
 
+  world3D.deleteGraphique();
 	return EXIT_SUCCESS;
 }
