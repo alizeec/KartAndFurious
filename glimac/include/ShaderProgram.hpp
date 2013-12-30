@@ -45,7 +45,7 @@ public:
    * @param fragmentShaderFilePath
    * @return le ShaderProgram contenant les deux shaders
    */
-  static ShaderProgram loadProgram(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath);
+  int loadProgram(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath);
 
   /**
    * @brief addShader ajoute un shader décrit par le fichier dont le chemin d'accès est

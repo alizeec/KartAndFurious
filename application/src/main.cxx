@@ -28,13 +28,15 @@ int main() {
   //On active le test de profondeur dans OpenGL
   glEnable(GL_DEPTH_TEST);
 
+  //-----------------------------------------------------
+
   //chargement de la texture
     /*glimac::Texture texture(GL_TEXTURE_2D);
     texture.loadTexture2D("data/fond-bois.jpg");*/
+
+ //initialisation du world3D, qui contiendra tous les Mesh
  worldGraphique world3D;
   world3D.initGraphisme();
-
-
 
 
   //Création du Kart "logique" qui va contenir le code de déplacement
@@ -43,23 +45,18 @@ int main() {
 
   //Création des kart des autres joueurs (IA)
   Kart IA1;
-  //On créé les ShaderProgram de base (le code des shaders est a regarder et devra etre modifie plus
-  // tard pour la gestion des textures entre autres
 
+
+
+ // création du shader de base.Ne gère pas les textures
  glimac::ShaderProgram shaderProgram;
-  std::string logInfo2;
-  shaderProgram.addShader(GL_VERTEX_SHADER, "shaders/Simple3DVS.glsl");
-  shaderProgram.addShader(GL_FRAGMENT_SHADER, "shaders/SimpleFS.glsl");
-  if (!shaderProgram.compileAndLinkShaders(logInfo2))
-  {
-    std::cerr << logInfo2 << std::endl;
-    return EXIT_FAILURE;
-  }
-  shaderProgram.use();
+ shaderProgram.loadProgram("shaders/Simple3DVS.glsl","shaders/SimpleFS.glsl");
+ shaderProgram.use();
+
 
   //GLint locationtex = shaderProgram.getUniformIndex("uTexture");
 
-  const glm::vec3 initialDirection=glm::vec3(0.f,0.f,6.f);
+  const glm::vec3 initialDirection=glm::vec3(0.f,0.f,3.f);
 
   sf::Clock clock;
 
@@ -77,8 +74,8 @@ int main() {
     world3D.listeMesh[0]->afficher(shaderProgram);
 
 
-    //On met à jour la position et l'orientation du modèle 3D
-    //par rapport au Kart "logique" qui gère le déplacement
+    //On met à jour la position et l'orientation des modèle 3D du kart du joueur et des IA
+    //par rapport aux Karts "logiques" qui gèrent le déplacement
     world3D.updatePositionKarts(kartDuJoueur, IA1);
 
 
@@ -89,14 +86,12 @@ int main() {
     world3D.listeMesh[2]->afficher(shaderProgram);
 
 
-    //La caméra est pour l'instant fixe
-
-    glm::vec3 cameraPosition = kartDuJoueur.getPosition()+ glm::vec3(0.f,6.f,0.f)+ glm::toMat3(kartDuJoueur.getOrientation())* initialDirection;
+    // gestion de la caméra
+    glm::vec3 cameraPosition = kartDuJoueur.getPosition()+ glm::vec3(0.f,3.f,0.f)+ glm::toMat3(kartDuJoueur.getOrientation())* initialDirection;
     glm::vec3 cameraDirection= kartDuJoueur.getPosition() ;
 
-
-
     glm::mat4 camera = glm::lookAt(cameraPosition,cameraDirection, glm::vec3(0.f,1.f, 0.f));
+
     //Le projeté 2D de la caméra (matrice de projection)
     glm::mat4 cameraProjetee =  glm::perspective(90.f, WINDOW_WIDTH / (float) WINDOW_HEIGHT, 0.1f, 1000.f) * camera;
 
@@ -108,8 +103,7 @@ int main() {
     //-------------- CODE "APPLICATIF"(la logique du jeu quoi, + gestion des évènements) ----------
 
     //On met à jour le Kart "logique" du joueur par rapport aux évènements claviers
-    //(faudrait que je demande à Laurent mais c'est bizarre de mettre ça avant la gestion des évènements)
-    //parce que du coup là on a un tour de boucle de retard...)
+
     
     IA1.avance();
 

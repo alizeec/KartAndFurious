@@ -2,6 +2,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <TextFile.hpp>
 #include <stdexcept>
+#include <iostream>
+
 
 #if DEBUG
   #include <iostream>
@@ -120,7 +122,7 @@ void ShaderProgram::setUniform(GLint uniformIndex, int scalar) const
   glUniform1i(uniformIndex,scalar);
 }
 
-ShaderProgram ShaderProgram::loadProgram(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath)
+/*ShaderProgram ShaderProgram::loadProgram(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath)
 {
   std::string vertexShaderSource;
   std::string fragmentShaderSource;
@@ -142,4 +144,18 @@ ShaderProgram ShaderProgram::loadProgram(const std::string& vertexShaderFilePath
   program.addShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
 
   return program;
+}*/
+
+int ShaderProgram::loadProgram(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath){
+    std::string logInfo;
+    this->addShader(GL_VERTEX_SHADER, vertexShaderFilePath);
+    this->addShader(GL_FRAGMENT_SHADER, fragmentShaderFilePath);
+    if (!this->compileAndLinkShaders(logInfo))
+    {
+      std::cerr << logInfo << std::endl;
+      return EXIT_FAILURE;
+    }
+    else{
+        return EXIT_SUCCESS;
+    }
 }
