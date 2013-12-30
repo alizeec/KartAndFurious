@@ -8,7 +8,7 @@
 
 class worldGraphique{
 public:
-void initGraphisme();
+void initGraphisme(Kart kart);
 void deleteGraphique();
 void updatePositionKarts(Kart, Kart);
 

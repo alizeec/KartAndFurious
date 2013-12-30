@@ -12,8 +12,6 @@
  * modifie sa vitesse "d'avancement" ou sa vitesse de "tournage" pour qu'elle soit différente de 0.
  * Ensuite c'est la méthode mettreAJour qui va modifier concrètement en fonction de ces deux paramètre la position
  * du Kart.
- * ATTENTION c'est vraiment une base, il faut rajouter la gestion du temps (un peu comme en TD) pour avoir
- * un déplacement qui dépend pas de la vitesse de votre processeur.
  */
 class Kart
 {
@@ -30,8 +28,30 @@ public:
   //Structure qui empacte les caractéristiques du Kart
   struct Specifications
   {
+      public:
+
     Specifications()
-      : acceleration(10.f), vitesseMax(20.f), vitesseAngulaire(90.f), coefficientFreinage(0.5f) {}
+        : acceleration(8.f), vitesseMax(20.f), vitesseAngulaire(90.f), coefficientFreinage(0.5f),nomduModele() {}
+
+    void setAcceleration(float accel){
+        this->acceleration=accel;
+    }
+
+    void setVitesseMax(float vM){
+        this->vitesseMax=vM;
+    }
+
+    void setVitesseAngulaire(float vA){
+        this->vitesseAngulaire=vA;
+    }
+
+    void setCoefficientFreinage(float coeff){
+        this->coefficientFreinage=coeff;
+    }
+
+    void setModeleName(std::string name){
+        this->nomduModele=name;
+    }
 
     ///Doit etre positive
     float acceleration;
@@ -41,7 +61,11 @@ public:
     float vitesseAngulaire;
     ///Doit etre positif
     float coefficientFreinage;
+
+    std::string nomduModele;
+
   };
+
 
   Kart();
   Kart(glm::vec3 position, glm::quat direction, float speed);
@@ -72,6 +96,8 @@ public:
 
   const glm::vec3& getPosition() const;
   const glm::quat& getOrientation() const;
+  Specifications specifications;
+
 
 private:
   glm::vec3 position;
@@ -82,7 +108,6 @@ private:
   float accelerationCourante;
 
   StatutAcceleration accelerationStatut;
-  Specifications specifications;
 };
 
 #endif

@@ -18,6 +18,7 @@ Kart::~Kart()
 {
 }
 
+
 void Kart::mettreAJour(sf::Time elapsedTime)
 {
   //Calcul de la nouvelle direction en fonction de l'angularSpeed

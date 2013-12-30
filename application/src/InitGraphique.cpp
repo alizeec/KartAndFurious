@@ -4,7 +4,7 @@
 #include "Mesh.hpp"
 #include "initGraphique.hpp"
 
-void worldGraphique::initGraphisme(){
+void worldGraphique::initGraphisme(Kart kart){
 
 
     //Chargement des données 3D
@@ -14,7 +14,7 @@ void worldGraphique::initGraphisme(){
 
 
     Mesh* kart3D=new(Mesh);
-    kart3D->loadFromFile("data/Bouboule.dae");
+    kart3D->loadFromFile(kart.specifications.nomduModele);
     this->listeMesh.push_back(kart3D);
 
 

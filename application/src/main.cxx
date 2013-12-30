@@ -9,6 +9,7 @@
 #include "VAO.hpp"
 #include "VBO.hpp"
 #include "initGraphique.hpp"
+#include "LoadKAF.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -35,18 +36,18 @@ int main() {
     texture.loadTexture2D("data/fond-bois.jpg");*/
 
  //initialisation du world3D, qui contiendra tous les Mesh
- worldGraphique world3D;
-  world3D.initGraphisme();
+
 
 
   //Création du Kart "logique" qui va contenir le code de déplacement
   Kart kartDuJoueur;
-  
+  LoadFileKAF(&kartDuJoueur,"KAF/kart1.KAF");
 
   //Création des kart des autres joueurs (IA)
   Kart IA1;
 
-
+  worldGraphique world3D;
+   world3D.initGraphisme(kartDuJoueur);
 
  // création du shader de base.Ne gère pas les textures
  glimac::ShaderProgram shaderProgram;
