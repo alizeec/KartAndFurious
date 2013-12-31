@@ -1,4 +1,5 @@
 #include "Kart.hpp"
+#include "Map.hpp"
 #include "LoadKAF.hpp"
 #include <string.h>
 #include <iostream>
@@ -6,7 +7,7 @@
 
 using namespace std;
 
-bool LoadFileKAF(Kart* kart,const std::string&  chemin){
+bool LoadKAFKart(Kart* kart,const std::string&  chemin){
     /* On ouvre le fichier */
 
         ifstream file(chemin, ios::in);  // on ouvre le fichier en lecture
@@ -30,11 +31,9 @@ bool LoadFileKAF(Kart* kart,const std::string&  chemin){
                     kart->specifications.setVitesseAngulaire(vitesseAngulaireRead);
                     kart->specifications.setCoefficientFreinage(coeffFreinageRead);
                     kart->specifications.setModeleName(name);
-                  }
-
-                if(type.compare("map")==0){
-                // code de lecture de la map
-                }
+                  }else{
+			cerr << "Ceci n'est pas un Kart" << endl;
+		  }
 
                  file.close();
             }
@@ -79,5 +78,51 @@ bool LoadFileKAF(Kart* kart,const std::string&  chemin){
 
                     }*/
 
+                    return true;
+}
+
+bool LoadKAFMap(Map* map,const std::string&  chemin){
+    /* On ouvre le fichier */
+
+        ifstream file(chemin, ios::in);  // on ouvre le fichier en lecture
+
+            if(file)  // si l'ouverture a réussi
+            {
+                string type;
+
+                file >> type;  /*on lit jusqu'à l'espace et on stocke ce qui est lu dans la variable indiquée */
+
+                if(type.compare("map")==0){
+                    string nom;
+		    string chemin;
+		    int nbPoints;		    
+                    file>>chemin>>nbPoints;
+                    map->setChemin(chemin);
+
+		    /*Récupération des coordonnées*/
+		    float tab[nbPoints];
+		    int cpt = 0;
+		    int coord;
+		    while (file >> coord){
+			tab[cpt] = coord;
+			cpt++;
+		   }
+		   for(int i=0; i<cpt;i+=3){
+			Point3D p;
+			p.x = tab[i];
+			p.y = tab[i+1];
+			p.z = tab[i+2];
+			map->trajet.push_back(p);
+
+		   }
+			
+                  }else{
+			cerr << "Ceci n'est pas une Map" << endl;
+		  }
+
+                 file.close();
+            }
+            else  // sinon
+                    cerr << "Impossible d'ouvrir le fichier !" << endl;
                     return true;
 }
