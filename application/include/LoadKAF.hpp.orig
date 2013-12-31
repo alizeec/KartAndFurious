@@ -1,0 +1,15 @@
+#ifndef LOAD_HPP
+#define LOAD_HPP
+#include "Kart.hpp"
+#include "Map.hpp"
+#include <string>
+
+
+<<<<<<< HEAD
+bool LoadFileKAFkart(Kart* kart,const std::string&  chemin);
+=======
+bool LoadKAFKart(Kart* kart,const std::string&  chemin);
+bool LoadKAFMap(Map* map,const std::string&  chemin);
+>>>>>>> 6a0bb6b5d32827a97ad02d8b2bf3cd9dbcc9dc5d
+
+#endif

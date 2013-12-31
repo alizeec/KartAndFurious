@@ -5,9 +5,11 @@
 #include <GL/glew.h>
 #include <iostream>
 #include <cstdlib>
+#include <vector>
 #include <time.h>
 #include "Mesh.hpp"
 #include "Kart.hpp"
+#include "Map.hpp"
 #include "Texture.hpp"
 #include "VAO.hpp"
 #include "VBO.hpp"
@@ -20,6 +22,8 @@
 int main() {
   const size_t WINDOW_WIDTH = 1024;
   const size_t WINDOW_HEIGHT = 768;
+  bool PointX = false;
+  bool PointZ = false;
 
   //------------- INITIALISATION ---------------------
   //Création de la fenetre et initialisation de GLEW
@@ -47,7 +51,11 @@ int main() {
 
   //Création du Kart "logique" qui va contenir le code de déplacement
   Kart kartDuJoueur;
-  LoadFileKAF(&kartDuJoueur,"KAF/kart1.KAF");
+  LoadKAFKart(&kartDuJoueur,"application/KAF/kart1.KAF");
+
+  Map map;
+  LoadKAFMap(&map,"application/KAF/map1.KAF");
+  Point3D current_point = map.trajet[0];
 
   //Création des kart des autres joueurs (IA)
   Kart IA1;
@@ -58,7 +66,7 @@ int main() {
 
  // création du shader de base.Ne gère pas les textures
  glimac::ShaderProgram shaderProgram;
- shaderProgram.loadProgram("shaders/Simple3DVS.glsl","shaders/SimpleFS.glsl");
+ shaderProgram.loadProgram("application/shaders/Simple3DVS.glsl","application/shaders/SimpleFS.glsl");
  shaderProgram.use();
 
 
@@ -114,10 +122,43 @@ int main() {
     //-------------- CODE "APPLICATIF"(la logique du jeu quoi, + gestion des évènements) ----------
 
     //On met à jour le Kart "logique" du joueur par rapport aux évènements claviers
+    //std::cout << IA1.getPosition().x - current_point.x << "\n";
+    if(IA1.getPosition().x - current_point.x < 0.001){
+	//std::cout<<"TOURNER \n";
+	if(IA1.getPosition().x < current_point.x){
+    		IA1.tourneAGauche();
+		//IA1.avance();
+	}else{
+		IA1.tourneADroite();
+		//IA1.avance();
+	}
+    }else{
+	//std::cout<<"STOOOOOOOP TOURNER \n";
+	PointX = true;
+	IA1.stopTourner();
+    } 
+    if(IA1.getPosition().z - current_point.z > -0.001){
+	//std::cout<<"AVANCER \n";
+	if(IA1.getPosition().z < current_point.z){
+    		IA1.avance();
+	}else{
+		IA1.avance();
+	}
+    }else{
+	//std::cout<<"STOOOOOOOP AVANCER \n";
 
-    
-    IA1.avance();
+	PointZ = true;
+	IA1.stopAvancer();
+    }
 
+    if(PointX == true){
+	std::cout<<"x:"<<IA1.getPosition().x << "\n";
+	//std::cout<<"z:"<<IA1.getPosition().z << "\n";
+	std::cout<<"STOOOOOOOP \n";
+demandeAQuitter = true;
+    }
+    //std::cout << "z : " <<IA1.getPosition().z << "\n";
+    //std::cout << "z : " <<IA1.getPosition().x << "\n";
     sf::Time elapsed = clock.restart();
     kartDuJoueur.mettreAJour(elapsed);
     IA1.mettreAJour(elapsed);
