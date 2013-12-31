@@ -27,12 +27,15 @@ set_target_properties(assimp PROPERTIES COMPILE_FLAGS "-w")
 #glm
 include_directories(third-party/glm)
 
+
+
 #--------FAT AND FURIOUS------------------
 add_definitions(-Wall)
 set(CMAKE_CXX_FLAGS_DEBUG "-DDEBUG ${CMAKE_CXX_FLAGS_DEBUG}")
 file(COPY application/shaders DESTINATION ./application)
 file(COPY application/data DESTINATION ./application)
 file(COPY application/KAF DESTINATION ./application)
+file(COPY application/font DESTINATION ./application)
 
 #Windows : copie des DLL a cote de l'exe
 IF(WIN32)
@@ -43,6 +46,6 @@ ENDIF(WIN32)
 include_directories(glimac/include)
 add_subdirectory(glimac)
 
-set(ALL_LIBRARIES  assimp glew  glimac ${OPENGL_LIBRARIES} ${SFML_LIBRARIES} )
+set(ALL_LIBRARIES  assimp glew glimac ${OPENGL_LIBRARIES} ${SFML_LIBRARIES} )
 
 add_subdirectory(application)

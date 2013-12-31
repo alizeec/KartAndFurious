@@ -1,4 +1,7 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include<SFML/System.hpp>
+
 #include <GL/glew.h>
 #include <iostream>
 #include <cstdlib>
@@ -10,6 +13,7 @@
 #include "VBO.hpp"
 #include "initGraphique.hpp"
 #include "LoadKAF.hpp"
+
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -35,7 +39,9 @@ int main() {
     /*glimac::Texture texture(GL_TEXTURE_2D);
     texture.loadTexture2D("data/fond-bois.jpg");*/
 
- //initialisation du world3D, qui contiendra tous les Mesh
+
+
+
 
 
 
@@ -46,6 +52,7 @@ int main() {
   //Création des kart des autres joueurs (IA)
   Kart IA1;
 
+  //initialisation du world3D, qui contiendra tous les Mesh
   worldGraphique world3D;
    world3D.initGraphisme(kartDuJoueur);
 
@@ -71,6 +78,7 @@ int main() {
     //-----------------RENDU 3D-----------------------
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
     //On affiche le circuit
     world3D.listeMesh[0]->afficher(shaderProgram);
 
@@ -87,6 +95,7 @@ int main() {
     world3D.listeMesh[2]->afficher(shaderProgram);
 
 
+
     // gestion de la caméra
     glm::vec3 cameraPosition = kartDuJoueur.getPosition()+ glm::vec3(0.f,3.f,0.f)+ glm::toMat3(kartDuJoueur.getOrientation())* initialDirection;
     glm::vec3 cameraDirection= kartDuJoueur.getPosition() ;
@@ -99,6 +108,7 @@ int main() {
     //On balance ça au shader !
     GLint viewProjectionIndex = shaderProgram.getUniformIndex("viewProjection");
     shaderProgram.setUniform(viewProjectionIndex, cameraProjetee);
+
 
 
     //-------------- CODE "APPLICATIF"(la logique du jeu quoi, + gestion des évènements) ----------

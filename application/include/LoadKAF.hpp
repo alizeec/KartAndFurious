@@ -4,6 +4,6 @@
 #include <string>
 
 
-bool LoadFileKAF(Kart* kart,const std::string&  chemin);
+bool LoadFileKAFkart(Kart* kart,const std::string&  chemin);
 
 #endif
