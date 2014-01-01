@@ -9,7 +9,7 @@ void worldGraphique::initGraphisme(Kart kart){
 
     //Chargement des données 3D
     Mesh* circuit3D=new(Mesh);
-    circuit3D->loadFromFile("application/data/circuit.dae");
+    circuit3D->loadFromFile("data/circuit.dae");
     this->listeMesh.push_back(circuit3D);
 
 
@@ -19,7 +19,7 @@ void worldGraphique::initGraphisme(Kart kart){
 
 
     Mesh* kart3D_IA1=new(Mesh);
-    kart3D_IA1->loadFromFile("application/data/Bouboule.dae");
+    kart3D_IA1->loadFromFile("data/Bouboule.dae");
     this->listeMesh.push_back(kart3D_IA1);
 
 

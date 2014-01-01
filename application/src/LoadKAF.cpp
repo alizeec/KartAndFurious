@@ -37,63 +37,26 @@ bool LoadKAFKart(Kart* kart,const std::string&  chemin){
 
                  file.close();
             }
-            else  // sinon
+            else  {
                     cerr << "Impossible d'ouvrir le fichier !" << endl;
                     return false;
-
-
-
-
-
-
-
-            /*std::string keyword;
-
-            file = fopen(chemin.c_str(),"r");
-            if(file == NULL) return false;
-
-            char type [10];
-            int k;
-            for (k=0; k<10;k++){
-                    type[k]= 0;
             }
-
-            int i;
-            for (i=0; i< 4; i++){
-                    fscanf(file,"%c \n",type+i);
-            }
-
-                    if (strcmp(type,"map")!= 0 && strcmp(type,"kart")!=0 ){
-                            fprintf(stderr, "Fichier incompatible\n");
-                            return false;
-                    }
-
-                    if (strcmp(type,"kart")==0){
-
-                        float type2;
-
-
-                                fscanf(file,"%f \n",type2);
-
-                        kart->specifications.setAcceleration(type2);
-
-                    }*/
 
                     return true;
 }
 
-bool LoadKAFMap(Map* map,const std::string&  chemin){
+bool LoadKAFMap(Map* map,const std::string&  cheminMap){
     /* On ouvre le fichier */
 
-        ifstream file(chemin, ios::in);  // on ouvre le fichier en lecture
+        ifstream file(cheminMap, ios::in);  // on ouvre le fichier en lecture
 
             if(file)  // si l'ouverture a réussi
             {
                 string type;
 
-                file >> type;  /*on lit jusqu'à l'espace et on stocke ce qui est lu dans la variable indiquée */
+                file >> type; /*on lit jusqu'à l'espace et on stocke ce qui est lu dans la variable indiquée */
 
-                if(type.compare("map")==0){
+               if(type.compare("map")==0){
                     string nom;
 		    string chemin;
 		    int nbPoints;		    
@@ -101,7 +64,7 @@ bool LoadKAFMap(Map* map,const std::string&  chemin){
                     map->setChemin(chemin);
 
 		    /*Récupération des coordonnées*/
-		    float tab[nbPoints];
+            float tab[nbPoints];
 		    int cpt = 0;
 		    int coord;
 		    while (file >> coord){
@@ -123,7 +86,52 @@ bool LoadKAFMap(Map* map,const std::string&  chemin){
 
                  file.close();
             }
-            else  // sinon
-                    cerr << "Impossible d'ouvrir le fichier !" << endl;
-                    return true;
+            else {
+                    cerr << "Impossible d'ouvrir le fichier Map!" << endl;
+                    return false;
+            }
+
+
+}
+
+bool LoadKAFCollision(Map* map,const std::string&  collision){
+    ifstream file(collision, ios::in);  // on ouvre le fichier en lecture
+
+        if(file)  // si l'ouverture a réussi
+        {
+            string Type,Type2,typeInfo;
+            float coordx,coordy,coordz,sizex,sizey,sizez;
+            std::vector<Point3D> coord;
+            std::vector<Point3D> size;
+
+                while (file >> Type>>Type2>>typeInfo >> coordx>> coordy>> coordz>> typeInfo>> sizex>>sizey>>sizez
+){
+
+
+                 Point3D pcoord;
+                 pcoord.x = coordx;
+                 pcoord.y = coordy;
+                 pcoord.z = coordz;
+
+                 Point3D psize;
+                 psize.x = sizex;
+                 psize.y = sizey;
+                 psize.z = sizez;
+
+                 map->ralentissement.setRallentissement(pcoord,psize);
+
+  }
+
+
+
+
+            file.close();
+
+
+        }
+        else{
+            cerr << "Impossible d'ouvrir le fichier Collision!" << endl;
+            return false;
+        }
+    return true;
 }

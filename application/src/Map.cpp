@@ -23,3 +23,16 @@ const int Map::getNbPoints() const
   {return nbPoints;}
 
 
+void Map::Ralentissement::setRallentissement(const Point3D coordonnees,const Point3D taille){
+    this->coord.push_back(coordonnees);
+    this->size.push_back(taille);
+}
+
+std::vector<Point3D> Map::Ralentissement::getRallentissementCoord(){
+    return this->coord;
+}
+
+
+std::vector<Point3D> Map::Ralentissement::getRallentissementSize(){
+    return this->size;
+}

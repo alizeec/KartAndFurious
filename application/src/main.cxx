@@ -51,10 +51,12 @@ int main() {
 
   //Création du Kart "logique" qui va contenir le code de déplacement
   Kart kartDuJoueur;
-  LoadKAFKart(&kartDuJoueur,"application/KAF/kart1.KAF");
+  LoadKAFKart(&kartDuJoueur,"KAF/kart1.KAF");
 
   Map map;
-  LoadKAFMap(&map,"application/KAF/map1.KAF");
+  LoadKAFMap(&map,"KAF/map1.KAF");
+  LoadKAFCollision(&map,"KAF/test.KAF");
+
   Point3D current_point = map.trajet[0];
 
   //Création des kart des autres joueurs (IA)
@@ -66,7 +68,7 @@ int main() {
 
  // création du shader de base.Ne gère pas les textures
  glimac::ShaderProgram shaderProgram;
- shaderProgram.loadProgram("application/shaders/Simple3DVS.glsl","application/shaders/SimpleFS.glsl");
+ shaderProgram.loadProgram("shaders/Simple3DVS.glsl","shaders/SimpleFS.glsl");
  shaderProgram.use();
 
 
@@ -75,7 +77,6 @@ int main() {
   const glm::vec3 initialDirection=glm::vec3(0.f,0.f,3.f);
 
   sf::Clock clock;
-
 
 
 
@@ -119,11 +120,12 @@ int main() {
 
 
 
+
     //-------------- CODE "APPLICATIF"(la logique du jeu quoi, + gestion des évènements) ----------
 
     //On met à jour le Kart "logique" du joueur par rapport aux évènements claviers
     //std::cout << IA1.getPosition().x - current_point.x << "\n";
-    if(IA1.getPosition().x - current_point.x < 0.001){
+   /* if(IA1.getPosition().x - current_point.x < 0.001){
 	//std::cout<<"TOURNER \n";
 	if(IA1.getPosition().x < current_point.x){
     		IA1.tourneAGauche();
@@ -159,9 +161,22 @@ demandeAQuitter = true;
     }
     //std::cout << "z : " <<IA1.getPosition().z << "\n";
     //std::cout << "z : " <<IA1.getPosition().x << "\n";
+    */
     sf::Time elapsed = clock.restart();
     kartDuJoueur.mettreAJour(elapsed);
     IA1.mettreAJour(elapsed);
+
+    int size = map.ralentissement.getRallentissementCoord().size();
+    std::vector <Point3D> positionfriction = map.ralentissement.getRallentissementCoord();
+    std::vector <Point3D> sizefriction = map.ralentissement.getRallentissementSize();
+
+   /* const glm::vec3& currentpositionkart = kartDuJoueur.getPosition();
+    for (int i=0;i<size; ++i){
+        if (currentpositionkart[0]>(positionfriction[i].x-sizefriction[i].x/2) && currentpositionkart[0]<(positionfriction[i].x+sizefriction[i].x/2) && currentpositionkart[1]>(positionfriction[i].y-sizefriction[i].y/2) && currentpositionkart[1]<(positionfriction[i].y+sizefriction[i].y/2) ) {
+
+        }
+
+    }*/
 
     //Gestion du clavier
     sf::Event e;
@@ -202,9 +217,35 @@ demandeAQuitter = true;
 
             else if (e.key.code == sf::Keyboard::Right)
                 kartDuJoueur.stopTourner();
+
+            else if (e.key.code == sf::Keyboard::Space){
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+                    kartDuJoueur.avance();
+                }
+
+                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+                    kartDuJoueur.recule();
+                }
+
+                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+                    kartDuJoueur.tourneAGauche();
+                }
+
+                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+                    kartDuJoueur.tourneADroite();
+                }
+
+                else{
+                    kartDuJoueur.stopAvancer();
+                    kartDuJoueur.stopTourner();
+                }
+            }
+
             break;
         default:
           break;
+
+
       }
     }
     //Equivalent du swapBuffer de la SDL

@@ -99,7 +99,7 @@ public:
   Specifications specifications;
 
 
-private:
+//private:
   glm::vec3 position;
   glm::quat orientation;
   float angleDirection;

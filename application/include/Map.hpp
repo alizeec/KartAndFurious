@@ -29,11 +29,31 @@ public:
         this->nbPoints=nb;
     }
 
+  struct Ralentissement{
+  private:
+      std::vector<Point3D> coord;
+      std::vector<Point3D> size;
+
+  public:
+      void setRallentissement(const Point3D, const Point3D);
+      std::vector<Point3D> getRallentissementCoord();
+      std::vector<Point3D> getRallentissementSize();
+
+
+
+  };
+
+  Ralentissement ralentissement;
+
+
+
 std::vector<Point3D> trajet;
 private:
   std::string chemin;
   int nbPoints;
     
+
+
 };
 
 #endif
