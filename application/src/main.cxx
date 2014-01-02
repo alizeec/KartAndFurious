@@ -116,7 +116,7 @@ int main() {
 
 
     // gestion de la caméra
-    glm::vec3 cameraPosition = kartDuJoueur.getPosition()+ glm::vec3(0.f,3.f,0.f)+ glm::toMat3(kartDuJoueur.getOrientation())* initialDirection;
+    glm::vec3 cameraPosition = kartDuJoueur.getPosition()+ glm::vec3(0.f,4.f,0.f)+ glm::toMat3(kartDuJoueur.getOrientation())* initialDirection;
     glm::vec3 cameraDirection= kartDuJoueur.getPosition() ;
 
     glm::mat4 camera = glm::lookAt(cameraPosition,cameraDirection, glm::vec3(0.f,1.f, 0.f));
@@ -180,10 +180,6 @@ demandeAQuitter = true;
     std::vector <Point3D> positionfriction = map.ralentissement.getRallentissementCoord();
     std::vector <Point3D> sizefriction = map.ralentissement.getRallentissementSize();
 
-    glm::vec3 current = kartDuJoueur.getPosition();
-    //std::cout<<kartDuJoueur.vitesse<<std::endl;
-
-
 const glm::vec3& currentpositionkart = kartDuJoueur.getPosition();
    bool friction=false;
     for (int i=0;i<size; ++i){
@@ -191,8 +187,6 @@ const glm::vec3& currentpositionkart = kartDuJoueur.getPosition();
             friction=true;
             }
         }
-    float vitessedebase=kartDuJoueur.specifications.acceleration;
-    std::cout<<kartDuJoueur.specifications.acceleration<<std::endl;
     if(friction==true){
         kartDuJoueur.freiner();
     }
