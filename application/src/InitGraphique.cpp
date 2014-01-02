@@ -36,5 +36,5 @@ void worldGraphique::updatePositionKarts(Kart kartDuJoueur, Kart IA1){
         //On met à jour la position et l'orientation du modèle 3D
         //par rapport au Kart "logique" qui gère le déplacement
         this->listeMesh[1]->setPositionEtOrientation(kartDuJoueur.getPosition(), kartDuJoueur.getOrientation());
-        this->listeMesh[2]->setPositionEtOrientation(IA1.getPosition()+glm::vec3(6.f,0.f,0.f), IA1.getOrientation());
+        this->listeMesh[2]->setPositionEtOrientation(IA1.getPosition(), IA1.getOrientation());
 }

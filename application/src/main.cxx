@@ -7,6 +7,8 @@
 #include <cstdlib>
 #include <vector>
 #include <time.h>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include "Mesh.hpp"
 #include "Kart.hpp"
 #include "Map.hpp"
@@ -51,7 +53,14 @@ int main() {
 
   //Création du Kart "logique" qui va contenir le code de déplacement
   Kart kartDuJoueur;
+  kartDuJoueur.updatePosition(glm::vec3(26.f,0.f,78.f));
+  kartDuJoueur.updateOrientation(70.f);
+
   LoadKAFKart(&kartDuJoueur,"KAF/kart1.KAF");
+
+
+
+
 
   Map map;
   LoadKAFMap(&map,"KAF/map1.KAF");
@@ -61,6 +70,8 @@ int main() {
 
   //Création des kart des autres joueurs (IA)
   Kart IA1;
+  IA1.updatePosition(glm::vec3(-5.5f,0.f,-27.f));
+  IA1.updateOrientation(70.f);
 
   //initialisation du world3D, qui contiendra tous les Mesh
   worldGraphique world3D;
@@ -95,7 +106,6 @@ int main() {
     //On met à jour la position et l'orientation des modèle 3D du kart du joueur et des IA
     //par rapport aux Karts "logiques" qui gèrent le déplacement
     world3D.updatePositionKarts(kartDuJoueur, IA1);
-
 
 
     //Enfin on affiche le Kart 3D du joueur et les IA
@@ -170,13 +180,26 @@ demandeAQuitter = true;
     std::vector <Point3D> positionfriction = map.ralentissement.getRallentissementCoord();
     std::vector <Point3D> sizefriction = map.ralentissement.getRallentissementSize();
 
-   /* const glm::vec3& currentpositionkart = kartDuJoueur.getPosition();
+    glm::vec3 current = kartDuJoueur.getPosition();
+    //std::cout<<kartDuJoueur.vitesse<<std::endl;
+
+
+const glm::vec3& currentpositionkart = kartDuJoueur.getPosition();
+   bool friction=false;
     for (int i=0;i<size; ++i){
-        if (currentpositionkart[0]>(positionfriction[i].x-sizefriction[i].x/2) && currentpositionkart[0]<(positionfriction[i].x+sizefriction[i].x/2) && currentpositionkart[1]>(positionfriction[i].y-sizefriction[i].y/2) && currentpositionkart[1]<(positionfriction[i].y+sizefriction[i].y/2) ) {
-
+        if (currentpositionkart[0]>(positionfriction[i].x-sizefriction[i].x/2) && currentpositionkart[0]<(positionfriction[i].x+sizefriction[i].x/2) && currentpositionkart[1]>(positionfriction[i].y-sizefriction[i].y/2) && currentpositionkart[1]<(positionfriction[i].y+sizefriction[i].y/2)) {
+            friction=true;
+            }
         }
+    float vitessedebase=kartDuJoueur.specifications.acceleration;
+    std::cout<<kartDuJoueur.specifications.acceleration<<std::endl;
+    if(friction==true){
+        kartDuJoueur.freiner();
+    }
+   else if(friction==false){
+        kartDuJoueur.stopFreiner();
+    }
 
-    }*/
 
     //Gestion du clavier
     sf::Event e;
@@ -188,21 +211,26 @@ demandeAQuitter = true;
                 window.close();
                 demandeAQuitter = true;
         break;
+
         case sf::Event::KeyPressed:
             if (e.key.code == sf::Keyboard::Down)
                 kartDuJoueur.recule();
 
-            else if (e.key.code == sf::Keyboard::Up)
+            if (e.key.code == sf::Keyboard::Up){
                 kartDuJoueur.avance();
+            }
 
-            else if (e.key.code == sf::Keyboard::Left)
+            if (e.key.code == sf::Keyboard::Space){
+              kartDuJoueur.freiner();
+            }
+
+            if (e.key.code == sf::Keyboard::Left)
                 kartDuJoueur.tourneAGauche();
 
-            else if (e.key.code == sf::Keyboard::Right)
+            if (e.key.code == sf::Keyboard::Right)
                 kartDuJoueur.tourneADroite();
 
-            else if (e.key.code == sf::Keyboard::Space)
-              kartDuJoueur.freiner();
+
 
             break;
         case sf::Event::KeyReleased:
@@ -218,28 +246,10 @@ demandeAQuitter = true;
             else if (e.key.code == sf::Keyboard::Right)
                 kartDuJoueur.stopTourner();
 
-            else if (e.key.code == sf::Keyboard::Space){
-                if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-                    kartDuJoueur.avance();
-                }
 
-                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-                    kartDuJoueur.recule();
-                }
+            else if (e.key.code == sf::Keyboard::Space)
+                kartDuJoueur.stopFreiner();
 
-                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-                    kartDuJoueur.tourneAGauche();
-                }
-
-                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-                    kartDuJoueur.tourneADroite();
-                }
-
-                else{
-                    kartDuJoueur.stopAvancer();
-                    kartDuJoueur.stopTourner();
-                }
-            }
 
             break;
         default:

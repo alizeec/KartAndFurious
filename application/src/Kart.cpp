@@ -18,6 +18,17 @@ Kart::~Kart()
 {
 }
 
+void Kart::updatePosition(glm::vec3 nouvellePosition){
+    this->position=nouvellePosition;
+}
+
+void Kart::updateOrientation(float nouvelleDirection){
+    this->angleDirection=nouvelleDirection;
+}
+
+
+
+
 
 void Kart::mettreAJour(sf::Time elapsedTime)
 {
@@ -69,6 +80,19 @@ void Kart::mettreAJour(sf::Time elapsedTime)
       else vitesse = - specifications.vitesseMax;
     }
   }
+  std::cout<<"avant"<<vitesse<<std::endl;
+  if (etatFreinage==true){
+      /*vitesse=vitesse-((vitesse*1.1)/100);
+  if(vitesse<5){*/
+      if (statutsens==AVANCE){
+     vitesse=5;}
+      else if (statutsens==RECULE){
+          vitesse=-5;}
+  /*}*/
+  }
+
+  std::cout<<"après"<<vitesse<<std::endl;
+
   position += direction * distanceParcourue;//en uniteOGL/seconde
 }
 
@@ -77,12 +101,14 @@ void Kart::avance(){
   //uniteOpenGL / seconde
   accelerationCourante = specifications.acceleration;
   accelerationStatut = ACCELERE;
+  statutsens = AVANCE;
 }
 
 void Kart::recule(){
   //uniteOpenGL / seconde
   accelerationCourante = - specifications.acceleration;
   accelerationStatut = ACCELERE;
+  statutsens = RECULE;
 }
 
 void Kart::tourneAGauche(){
@@ -100,7 +126,9 @@ void Kart::stopAvancer()
     return;
   accelerationCourante = -5*accelerationCourante;
   accelerationStatut = DECELERE;
+
 }
+
 
 void Kart::stopTourner()
 {
@@ -111,17 +139,25 @@ void Kart::stopTourner()
 void Kart::freiner()
 {
   //Si on est deja en train de decelerer il faut juste augmenter l'acceleration courante
-  if (accelerationStatut == DECELERE)
+  /*if (accelerationStatut == DECELERE)
   {
     accelerationCourante = specifications.coefficientFreinage * accelerationCourante;
+
   }
   //Sinon il faut carrement prendre son oppose
   else
   {
     accelerationStatut = DECELERE;
     accelerationCourante = - specifications.coefficientFreinage * accelerationCourante;
-  }
+
+  }*/
+etatFreinage=true;
 }
+
+void Kart::stopFreiner(){
+    etatFreinage=false;
+}
+
 
 const glm::vec3& Kart::getPosition() const
   {return position;}

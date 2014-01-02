@@ -22,7 +22,13 @@ public:
     ACCELERE,
     DECELERE,
     VITESSE_MAX_ATTEINTE,
-    NE_BOUGE_PAS
+       FREINE,
+    NE_BOUGE_PAS,
+  };
+
+  enum StatutSens{
+      AVANCE,
+      RECULE,
   };
 
   //Structure qui empacte les caractéristiques du Kart
@@ -70,6 +76,9 @@ public:
   Kart();
   Kart(glm::vec3 position, glm::quat direction, float speed);
   virtual ~Kart();
+  void updatePosition(glm::vec3 nouvellePosition);
+  void updateOrientation(float nouvelleDirection);
+  bool etatFreinage = false;
 
 
 
@@ -93,6 +102,7 @@ public:
   void stopTourner();
 
   void freiner();
+  void stopFreiner();
 
   const glm::vec3& getPosition() const;
   const glm::quat& getOrientation() const;
@@ -108,6 +118,7 @@ public:
   float accelerationCourante;
 
   StatutAcceleration accelerationStatut;
+  StatutSens statutsens;
 };
 
 #endif
