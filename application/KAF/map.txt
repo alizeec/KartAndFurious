@@ -1,3 +1,15 @@
+Checkpoint Empty
+location 2.497149 2.402738 19.489620
+radius 2.231076
+Checkpoint Empty.001
+location 21.104958 2.402738 5.054471
+radius 2.231076
+Checkpoint Empty.002
+location -10.410563 2.402738 -8.242787
+radius 2.231076
+Checkpoint Empty.003
+location -23.118561 2.402738 4.178362
+radius 2.231076
 FrictionArea Lattice
 location -9.051734 2.402738 -19.244423
 size 48.843750 1.000000 14.916992

@@ -180,7 +180,7 @@ demandeAQuitter = true;
     std::vector <Point3D> sizefriction = map.ralentissement.getRallentissementSize();
     /* detection des zones de friction */
     /* pour le moment j'ai l'impression que c'est mal calculé parce qu'il y en a trop, a voir avec le lattice de test*/
-   /*const glm::vec3& currentpositionkart = kartDuJoueur.getPosition();
+   const glm::vec3& currentpositionkart = kartDuJoueur.getPosition();
        bool friction=false;
         for (int i=0;i<size; ++i){
             if (currentpositionkart[0]>(positionfriction[i].x-(sizefriction[i].x)/2) && currentpositionkart[0]<(positionfriction[i].x+(sizefriction[i].x)/2) && currentpositionkart[2]>(positionfriction[i].z-(sizefriction[i].z)/2) && currentpositionkart[2]<(positionfriction[i].z+(sizefriction[i].z)/2)) {
@@ -188,13 +188,14 @@ demandeAQuitter = true;
                 }
             }
         /* si on est dans une zone */
-       /*if(friction==true){
+       if(friction==true){
+           std::cout<<"coucou"<<std::endl;
             kartDuJoueur.freiner();
         }
         /* si on y est pas encore ou qu'on en sort*/
-      /*else if(friction==false){
+      else if(friction==false){
             kartDuJoueur.stopFreiner();
-        }*/
+        }
 
 
     //Gestion du clavier
