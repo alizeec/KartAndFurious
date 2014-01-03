@@ -3,7 +3,7 @@
 #include <TextFile.hpp>
 #include <stdexcept>
 #include <iostream>
-
+#include "OpenGLDebugger.hpp"
 
 #if DEBUG
   #include <iostream>
