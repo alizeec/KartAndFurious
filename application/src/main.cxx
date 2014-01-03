@@ -123,6 +123,9 @@ int main() {
     //On balance ça au shader !
     GLint viewProjectionIndex = shaderProgram.getUniformIndex("viewProjection");
     shaderProgram.setUniform(viewProjectionIndex, cameraProjetee);
+    //Pour le soleil
+    GLint viewIndex = shaderProgram.getUniformIndex("view");
+    shaderProgram.setUniform(viewIndex, camera);
 
 
 
