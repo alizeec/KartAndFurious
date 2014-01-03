@@ -41,9 +41,7 @@ int main() {
 
   //-----------------------------------------------------
 
-  //chargement de la texture
-    /*glimac::Texture texture(GL_TEXTURE_2D);
-    texture.loadTexture2D("data/fond-bois.jpg");*/
+
 
 
   /* initialisation de la map */
@@ -77,6 +75,8 @@ int main() {
  glimac::ShaderProgram shaderProgram;
  shaderProgram.loadProgram("shaders/Simple3DVS.glsl","shaders/SimpleFS.glsl");
  shaderProgram.use();
+
+
 
 
   //GLint locationtex = shaderProgram.getUniformIndex("uTexture");
@@ -172,12 +172,9 @@ demandeAQuitter = true;
     kartDuJoueur.mettreAJour(elapsed);
     IA1.mettreAJour(elapsed);
 
-    std::cout<<kartDuJoueur.position[0]<<","<<kartDuJoueur.position[1]<<","<<kartDuJoueur.position[2]<<std::endl;
-
     int size = map.ralentissement.getRallentissementCoord().size();
     std::vector <Point3D> positionfriction = map.ralentissement.getRallentissementCoord();
     std::vector <Point3D> sizefriction = map.ralentissement.getRallentissementSize();
-    std::cout<<kartDuJoueur.position[0]<<","<<kartDuJoueur.position[2]<<std::endl;
     /* detection des zones de friction */
     /* pour le moment j'ai l'impression que c'est mal calculé parce qu'il y en a trop, a voir avec le lattice de test*/
    /*const glm::vec3& currentpositionkart = kartDuJoueur.getPosition();
