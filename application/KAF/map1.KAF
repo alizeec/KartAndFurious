@@ -1,5 +1,7 @@
 map
-application/data/circuit.dae
+data/map.dae
+data/Bouboule.dae
+8.8 1 19 90
 4
 5 0 -15
 30 0 5

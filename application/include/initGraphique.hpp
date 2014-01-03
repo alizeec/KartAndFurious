@@ -5,10 +5,11 @@
 #include <vector>
 #include "Mesh.hpp"
 #include "Kart.hpp"
+#include "Map.hpp"
 
 class worldGraphique{
 public:
-void initGraphisme(Kart kart);
+void initGraphisme(Kart kart, Map map);
 void deleteGraphique();
 void updatePositionKarts(Kart, Kart);
 

@@ -59,9 +59,14 @@ bool LoadKAFMap(Map* map,const std::string&  cheminMap){
                if(type.compare("map")==0){
                     string nom;
 		    string chemin;
+            string nomIA;
+            float StartCoordx, StartCoordy, StartCoordz, StartAngle;
 		    int nbPoints;		    
-                    file>>chemin>>nbPoints;
+                    file>>chemin>>nomIA>>StartCoordx>>StartCoordy>>StartCoordz>>StartAngle>>nbPoints;
                     map->setChemin(chemin);
+                    map->setIA(nomIA);
+                    map->setLigneDepart(StartCoordx,StartCoordy,StartCoordz,StartAngle);
+
 
 		    /*Récupération des coordonnées*/
             float tab[nbPoints];

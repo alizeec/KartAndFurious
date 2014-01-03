@@ -80,23 +80,20 @@ void Kart::mettreAJour(sf::Time elapsedTime)
       else vitesse = - specifications.vitesseMax;
     }
   }
-  std::cout<<"avant"<<vitesse<<std::endl;
-  if (etatFreinage==true){
-      /*vitesse=vitesse-((vitesse*1.1)/100);
-  if(vitesse<5){*/
-      if (statutsens==AVANCE){
-     vitesse=5;}
-      else if (statutsens==RECULE){
-          vitesse=-5;}
-  /*}*/
-  }
 
-  std::cout<<"après"<<vitesse<<std::endl;
+  /* Freinage  : pour le moment si on freine, il roule à 5*/
+    /* A faire, importer depuis le .KAF une vitesse de freinage pour chaque kart*/
+  if (etatFreinage==true){
+      if (statutsens==AVANCE){
+     vitesse=specifications.coefficientFreinage;}
+      else if (statutsens==RECULE){
+          vitesse=-specifications.coefficientFreinage;}
+
+  }
 
   position += direction * distanceParcourue;//en uniteOGL/seconde
 }
 
-//Les valeurs dans les méthodes qui suivent sont là pour les tests
 void Kart::avance(){
   //uniteOpenGL / seconde
   accelerationCourante = specifications.acceleration;
@@ -124,7 +121,7 @@ void Kart::stopAvancer()
   //Si on est deja en train de decelerer, rien a faire
   if (accelerationStatut == DECELERE)
     return;
-  accelerationCourante = -5*accelerationCourante;
+  accelerationCourante = -70*accelerationCourante;
   accelerationStatut = DECELERE;
 
 }
@@ -135,22 +132,9 @@ void Kart::stopTourner()
   vitesseAngulaireCourante = 0.f;
 }
 
-//Le freinage est juste une deceleration plus puissante pour l'instant
+
 void Kart::freiner()
 {
-  //Si on est deja en train de decelerer il faut juste augmenter l'acceleration courante
-  /*if (accelerationStatut == DECELERE)
-  {
-    accelerationCourante = specifications.coefficientFreinage * accelerationCourante;
-
-  }
-  //Sinon il faut carrement prendre son oppose
-  else
-  {
-    accelerationStatut = DECELERE;
-    accelerationCourante = - specifications.coefficientFreinage * accelerationCourante;
-
-  }*/
 etatFreinage=true;
 }
 
