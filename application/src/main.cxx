@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include<SFML/System.hpp>
-
 #include <GL/glew.h>
 #include <iostream>
 #include <cstdlib>
@@ -17,6 +16,7 @@
 #include "VBO.hpp"
 #include "initGraphique.hpp"
 #include "LoadKAF.hpp"
+#include "game.hpp"
 
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -59,7 +59,6 @@ int main() {
   Kart kartDuJoueur;
   kartDuJoueur.updatePosition(map.getLigneDepartPosition());
   kartDuJoueur.updateOrientation(map.getLigneDepartAngle());
-
   LoadKAFKart(&kartDuJoueur,"KAF/kart2.KAF");
 
 
@@ -72,16 +71,12 @@ int main() {
   worldGraphique world3D;
    world3D.initGraphisme(kartDuJoueur, map);
 
- // création du shader de base.Ne gère pas les textures
+ // création du shader de base
  glimac::ShaderProgram shaderProgram;
  shaderProgram.loadProgram("shaders/Simple3DVS.glsl","shaders/SimpleFS.glsl");
  shaderProgram.use();
 
-
-
-
-  //GLint locationtex = shaderProgram.getUniformIndex("uTexture");
-
+   //pour la camera
   const glm::vec3 initialDirection=glm::vec3(0.f,0.f,3.f);
 
   sf::Clock clock;
@@ -176,50 +171,11 @@ demandeAQuitter = true;
     kartDuJoueur.mettreAJour(elapsed);
     IA1.mettreAJour(elapsed);
 
-    /* detection des zones de friction: sortie de route et surfaces glissantes*/
 
-    int sizeTabRallentissement = map.ralentissement.getRallentissementCoord().size();
-    std::vector <Point3D> positionfriction = map.ralentissement.getRallentissementCoord();
-    std::vector <Point3D> sizefriction = map.ralentissement.getRallentissementSize();
-   const glm::vec3& currentpositionkart = kartDuJoueur.getPosition();
-       bool friction=false;
-        for (int i=0;i<sizeTabRallentissement; ++i){
-            if (currentpositionkart[0]>(positionfriction[i].x-(sizefriction[i].x)/2) && currentpositionkart[0]<(positionfriction[i].x+(sizefriction[i].x)/2) && currentpositionkart[2]>(positionfriction[i].z-(sizefriction[i].z)/2) && currentpositionkart[2]<(positionfriction[i].z+(sizefriction[i].z)/2)) {
-                friction=true;
-                }
-            }
-        /* si on est dans une zone */
-       if(friction==true){
-            kartDuJoueur.freiner();
-        }
-        /* si on y est pas encore ou qu'on en sort*/
-      else if(friction==false){
-            kartDuJoueur.stopFreiner();
-        }
-
-       /* detection des checkpoints*/
-
-       std::cout<<kartDuJoueur.position[0]<<std::endl;
-
-       int sizeTabCheckpoint = map.checkpoint.getCheckpointCoord().size();
-       std::vector <Point3D> positionCheckpoint = map.checkpoint.getCheckpointCoord();
-       std::vector <float> sizeCheckpoint = map.checkpoint.getCheckpointRadius();
-       std::vector<bool> listeCheckpoint = map.checkpoint.getIsValidated();
+    detectionZonesRallentissantes(map,kartDuJoueur);
 
 
-       if(currentpositionkart[0]>(positionCheckpoint[0].x-(sizeCheckpoint[0]/2)) && currentpositionkart[0]<(positionCheckpoint[0].x+(sizeCheckpoint[0]/2)) && currentpositionkart[2]>(positionCheckpoint[0].z-(sizeCheckpoint[0]/2)) && currentpositionkart[2]<(positionCheckpoint[0].z+(sizeCheckpoint[0]/2)) && listeCheckpoint[1]==true && listeCheckpoint[2]==true && listeCheckpoint[3]==true && listeCheckpoint[4]==true){
-            map.checkpoint.setTrue(0);
-        }
-
-           for (int i=1;i<sizeTabCheckpoint; ++i){
-               if (currentpositionkart[0]>(positionCheckpoint[i].x-(sizeCheckpoint[i]/2)) && currentpositionkart[0]<(positionCheckpoint[i].x+(sizeCheckpoint[i]/2)) && currentpositionkart[2]>(positionCheckpoint[i].z-(sizeCheckpoint[i]/2)) && currentpositionkart[2]<(positionCheckpoint[i].z+(sizeCheckpoint[i]/2))) {
-                   map.checkpoint.setTrue(i);
-
-                   }
-               }
-           for (int j=0; j<5; ++j){
-               std::cout<<listeCheckpoint[j]<<std::endl;
-           }
+    detectionCheckpoints(kartDuJoueur, &map);
 
 
 
