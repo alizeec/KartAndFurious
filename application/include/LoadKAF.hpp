@@ -8,5 +8,6 @@
 bool LoadKAFKart(Kart* kart,const std::string&  chemin);
 bool LoadKAFMap(Map* map, const std::string&  cheminMap);
 bool LoadKAFCollision(Map* map, const std::string&  collision);
+bool LoadKAFCheckpoint(Map* map,const std::string&  checkpoint);
 
 #endif

@@ -47,7 +47,8 @@ int main() {
   /* initialisation de la map */
   Map map;
   LoadKAFMap(&map,"KAF/map1.KAF");
-  LoadKAFCollision(&map,"KAF/test.KAF");
+  LoadKAFCollision(&map,"KAF/mapFriction.KAF");
+  LoadKAFCheckpoint(&map, "KAF/mapCheckpoint.KAF");
 
   Point3D current_point = map.trajet[0];
 
@@ -175,27 +176,51 @@ demandeAQuitter = true;
     kartDuJoueur.mettreAJour(elapsed);
     IA1.mettreAJour(elapsed);
 
-    int size = map.ralentissement.getRallentissementCoord().size();
+    /* detection des zones de friction: sortie de route et surfaces glissantes*/
+
+    int sizeTabRallentissement = map.ralentissement.getRallentissementCoord().size();
     std::vector <Point3D> positionfriction = map.ralentissement.getRallentissementCoord();
     std::vector <Point3D> sizefriction = map.ralentissement.getRallentissementSize();
-    /* detection des zones de friction */
-    /* pour le moment j'ai l'impression que c'est mal calculé parce qu'il y en a trop, a voir avec le lattice de test*/
    const glm::vec3& currentpositionkart = kartDuJoueur.getPosition();
        bool friction=false;
-        for (int i=0;i<size; ++i){
+        for (int i=0;i<sizeTabRallentissement; ++i){
             if (currentpositionkart[0]>(positionfriction[i].x-(sizefriction[i].x)/2) && currentpositionkart[0]<(positionfriction[i].x+(sizefriction[i].x)/2) && currentpositionkart[2]>(positionfriction[i].z-(sizefriction[i].z)/2) && currentpositionkart[2]<(positionfriction[i].z+(sizefriction[i].z)/2)) {
                 friction=true;
                 }
             }
         /* si on est dans une zone */
        if(friction==true){
-           std::cout<<"coucou"<<std::endl;
             kartDuJoueur.freiner();
         }
         /* si on y est pas encore ou qu'on en sort*/
       else if(friction==false){
             kartDuJoueur.stopFreiner();
         }
+
+       /* detection des checkpoints*/
+
+       std::cout<<kartDuJoueur.position[0]<<std::endl;
+
+       int sizeTabCheckpoint = map.checkpoint.getCheckpointCoord().size();
+       std::vector <Point3D> positionCheckpoint = map.checkpoint.getCheckpointCoord();
+       std::vector <float> sizeCheckpoint = map.checkpoint.getCheckpointRadius();
+       std::vector<bool> listeCheckpoint = map.checkpoint.getIsValidated();
+
+
+       if(currentpositionkart[0]>(positionCheckpoint[0].x-(sizeCheckpoint[0]/2)) && currentpositionkart[0]<(positionCheckpoint[0].x+(sizeCheckpoint[0]/2)) && currentpositionkart[2]>(positionCheckpoint[0].z-(sizeCheckpoint[0]/2)) && currentpositionkart[2]<(positionCheckpoint[0].z+(sizeCheckpoint[0]/2)) && listeCheckpoint[1]==true && listeCheckpoint[2]==true && listeCheckpoint[3]==true && listeCheckpoint[4]==true){
+            map.checkpoint.setTrue(0);
+        }
+
+           for (int i=1;i<sizeTabCheckpoint; ++i){
+               if (currentpositionkart[0]>(positionCheckpoint[i].x-(sizeCheckpoint[i]/2)) && currentpositionkart[0]<(positionCheckpoint[i].x+(sizeCheckpoint[i]/2)) && currentpositionkart[2]>(positionCheckpoint[i].z-(sizeCheckpoint[i]/2)) && currentpositionkart[2]<(positionCheckpoint[i].z+(sizeCheckpoint[i]/2))) {
+                   map.checkpoint.setTrue(i);
+
+                   }
+               }
+           for (int j=0; j<5; ++j){
+               std::cout<<listeCheckpoint[j]<<std::endl;
+           }
+
 
 
     //Gestion du clavier

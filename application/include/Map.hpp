@@ -43,6 +43,23 @@ public:
 
   Ralentissement ralentissement;
 
+  struct Checkpoint{
+  private:
+      std::vector<Point3D> coord;
+      std::vector<float> radius;
+      std::vector<bool> isvalidated;
+
+  public:
+      void setCheckpoint (const Point3D coordonnees, const float rayon);
+      void setTrue(int position);
+      std::vector<Point3D> getCheckpointCoord();
+      std::vector<float> getCheckpointRadius();
+      std::vector<bool> getIsValidated();
+
+  };
+
+  Checkpoint checkpoint;
+
 
 
 std::vector<Point3D> trajet;

@@ -10,6 +10,7 @@ Map::Map()
 }
 Map::Map(std::string cheminMap ="", std::string IA="", glm::vec3 LigneDepartPosition=glm::vec3(0.f,1.f,0.f), float LigneDepartAngle = 0.f, int size = 0)
 {
+
 }
 
 Map::~Map()
@@ -61,3 +62,31 @@ std::vector<Point3D> Map::Ralentissement::getRallentissementCoord(){
 std::vector<Point3D> Map::Ralentissement::getRallentissementSize(){
     return this->size;
 }
+
+void Map::Checkpoint::setCheckpoint (const Point3D coordonnees, const float rayon){
+    this->coord.push_back(coordonnees);
+    this->radius.push_back(rayon);
+    this->isvalidated.push_back(false);
+}
+
+std::vector<Point3D> Map::Checkpoint::getCheckpointCoord(){
+    return this->coord;
+}
+
+std::vector<float> Map::Checkpoint::getCheckpointRadius(){
+    return this->radius;
+}
+
+void Map::Checkpoint::setTrue(int position){
+    this->isvalidated[position]=true;
+}
+
+
+std::vector<bool> Map::Checkpoint::getIsValidated(){
+    return this->isvalidated;
+}
+
+
+
+
+

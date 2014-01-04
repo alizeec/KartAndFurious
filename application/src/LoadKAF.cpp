@@ -97,7 +97,7 @@ bool LoadKAFMap(Map* map,const std::string&  cheminMap){
     return false;
   }
 
-
+return true;
 }
 
 bool LoadKAFCollision(Map* map,const std::string&  collision){
@@ -133,6 +133,40 @@ bool LoadKAFCollision(Map* map,const std::string&  collision){
   }
   else{
     cerr << "Impossible d'ouvrir le fichier Collision!" << endl;
+    return false;
+  }
+  return true;
+}
+
+
+
+
+bool LoadKAFCheckpoint(Map* map,const std::string&  checkpoint){
+  ifstream file(checkpoint, ios::in);  // on ouvre le fichier en lecture
+
+  if(file)  // si l'ouverture a réussi
+  {
+    string Type,Type2,typeInfo;
+    float coordx,coordy,coordz,radius;
+
+
+    while (file >> Type>>Type2>>typeInfo >> coordx>> coordy>> coordz>> typeInfo>>radius){
+
+
+      Point3D pcoord;
+      pcoord.x = coordx;
+      pcoord.y = coordy;
+      pcoord.z = coordz;
+
+      map->checkpoint.setCheckpoint(pcoord,radius);
+
+    }
+
+    file.close();
+
+  }
+  else{
+    cerr << "Impossible d'ouvrir le fichier Checkpoint!" << endl;
     return false;
   }
   return true;
