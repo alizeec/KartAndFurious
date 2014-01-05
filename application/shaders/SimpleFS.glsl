@@ -22,7 +22,7 @@ uniform Material material;
 
 vec4 ADS()
 {
-  vec4 sunLightDirInViewSpace = view * sunLightDirection;
+  vec4 sunLightDirInViewSpace = view *  sunLightDirection;
   float fDotProduct = max(0.0, dot(NormalViewSpace, sunLightDirInViewSpace));
   vec4 vDiffuseColor = material.diffuse * sunLightDiffuseIntensity * fDotProduct;
   vec4 vAmbientColor = material.ambient * ambientLightIntensity;
