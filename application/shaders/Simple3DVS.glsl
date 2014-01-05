@@ -21,6 +21,6 @@ out vec4 NormalViewSpace;
 void main() {
   gl_Position = viewProjection * model * vec4(iVertexPosition, 1.f);
   FragColor = material.ambient + material.diffuse + material.specular;
-  NormalViewSpace = view * vec4(iNormals, 0.f);
+  NormalViewSpace = view * model * vec4(iNormals, 0.f);
 }
 
