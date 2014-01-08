@@ -37,7 +37,7 @@ public:
       public:
 
     Specifications()
-        : acceleration(8.f), vitesseMax(20.f), vitesseAngulaire(90.f), coefficientFreinage(0.5f),nomduModele() {}
+        : acceleration(8.f), vitesseMax(10.f), vitesseAngulaire(20.f), coefficientFreinage(0.5f),nomduModele() {}
 
     void setAcceleration(float accel){
         this->acceleration=accel;
@@ -84,25 +84,25 @@ public:
 
   //Met à jour le Kart en fonction de sa vitesse, sa vitesse angulaire
   //sa position actuelle et son orientation actuelle
-   void mettreAJour(sf::Time elapsedTimeInSecond);
+  virtual void mettreAJour(sf::Time elapsedTimeInSecond);
 
   //Donne les ordres au Kart.
   //Modifient *vitesse* :
-   void avance();
-   void recule();
+  virtual  void avance();
+  virtual void recule();
 
   //Modifient vitesseAngulaire:
-   void tourneAGauche();
-   void tourneADroite();
+  virtual void tourneAGauche();
+  virtual void tourneADroite();
 
   //Met à zéro vitesse
-  void stopAvancer();
+ virtual void stopAvancer();
 
   //Met à zéro vitesseAngulaire
-  void stopTourner();
+  virtual void stopTourner();
 
-  void freiner();
-  void stopFreiner();
+  virtual void freiner();
+  virtual void stopFreiner();
 
   const glm::vec3& getPosition() const;
   const glm::quat& getOrientation() const;

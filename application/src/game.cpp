@@ -3,24 +3,24 @@
 #include "Kart.hpp"
 #include "Map.hpp"
 
-void detectionZonesRallentissantes(Map map,Kart kartDuJoueur){
+void detectionZonesRallentissantes(Map map, Kart *kartDuJoueur){
 int sizeTabRallentissement = map.ralentissement.getRallentissementCoord().size();
 std::vector <Point3D> positionfriction = map.ralentissement.getRallentissementCoord();
 std::vector <Point3D> sizefriction = map.ralentissement.getRallentissementSize();
-const glm::vec3& currentpositionkart = kartDuJoueur.getPosition();
+const glm::vec3& currentpositionkart = kartDuJoueur->getPosition();
    bool friction=false;
     for (int i=0;i<sizeTabRallentissement; ++i){
-        if (currentpositionkart[0]>(positionfriction[i].x-(sizefriction[i].x)/2) && currentpositionkart[0]<(positionfriction[i].x+(sizefriction[i].x)/2) && currentpositionkart[2]>(positionfriction[i].z-(sizefriction[i].z)/2) && currentpositionkart[2]<(positionfriction[i].z+(sizefriction[i].z)/2)) {
+       if (currentpositionkart[0]>(positionfriction[i].x-(sizefriction[i].x)/2) && currentpositionkart[0]<(positionfriction[i].x+(sizefriction[i].x)/2) && currentpositionkart[2]>(positionfriction[i].z-(sizefriction[i].z)/2) && currentpositionkart[2]<(positionfriction[i].z+(sizefriction[i].z)/2)) {
             friction=true;
             }
         }
     /* si on est dans une zone */
    if(friction==true){
-        kartDuJoueur.freiner();
+        kartDuJoueur->freiner();
     }
     /* si on y est pas encore ou qu'on en sort*/
   else if(friction==false){
-        kartDuJoueur.stopFreiner();
+        kartDuJoueur->stopFreiner();
     }
 }
 

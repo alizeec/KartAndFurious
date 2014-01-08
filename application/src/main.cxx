@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include<SFML/System.hpp>
+#include <SFML/Audio.hpp>
 #include <GL/glew.h>
 #include <iostream>
 #include <cstdlib>
@@ -46,14 +47,13 @@ int main() {
 
   /* initialisation de la map */
   Map map;
-  LoadKAFMap(&map,"KAF/map.KAF");
-  LoadKAFCollision(&map,"KAF/mapFriction.KAF");
-  LoadKAFCheckpoint(&map, "KAF/mapCheckpoint.KAF");
 
+  LoadKAFMap(&map,"KAF/map.KAF");
+  LoadKAFCollision(&map,"KAF/test.KAF");
+  LoadKAFCheckpoint(&map, "KAF/mapCheckpoint.KAF");
+std::cout<< map.getChemin()<<std::endl;
   int numPoint = 0;
   Point3D current_point = map.trajet[0];
-
-
 
 
   //Création du Kart "logique" qui va contenir le code de déplacement
@@ -62,7 +62,6 @@ int main() {
   kartDuJoueur.updatePosition(map.getLigneDepartPosition());
   kartDuJoueur.updateOrientation(map.getLigneDepartAngle());
   LoadKAFKart(&kartDuJoueur,"KAF/kart2.KAF");
-
 
   //Création des kart des autres joueurs (IA)
   Kart IA1;
@@ -86,6 +85,9 @@ int main() {
 
   sf::Clock clock;
 
+  sf::Music music; if (!music.openFromFile("data/1.ogg")) return -1;
+
+  music.play();
 
 
   //--------- BOUCLE DE JEU ---------------
@@ -94,7 +96,6 @@ int main() {
   {
     //-----------------RENDU 3D-----------------------
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 
     //On affiche le circuit
     world3D.listeMesh[0]->afficher(shaderProgram);
@@ -128,7 +129,6 @@ int main() {
     //Pour le soleil
     GLint viewIndex = shaderProgram.getUniformIndex("view");
     shaderProgram.setUniform(viewIndex, camera);
-
 
 
 
@@ -271,13 +271,13 @@ int main() {
     }
     //std::cout << "z : " <<IA1.getPosition().z << "\n";
     //std::cout << "z : " <<IA1.getPosition().x << "\n";
-    */
+
     sf::Time elapsed = clock.restart();
     kartDuJoueur.mettreAJour(elapsed);
     IA1.mettreAJour(elapsed);
 
 
-    detectionZonesRallentissantes(map,kartDuJoueur);
+    detectionZonesRallentissantes(map,&kartDuJoueur);
 
 
     detectionCheckpoints(kartDuJoueur, &map);
@@ -296,22 +296,31 @@ int main() {
         break;
 
         case sf::Event::KeyPressed:
-            if (e.key.code == sf::Keyboard::Down)
+
+          if (e.key.code == sf::Keyboard::Space){
+            kartDuJoueur.freiner();
+          }
+           else if (e.key.code == sf::Keyboard::Down){
                 kartDuJoueur.recule();
+            }
 
             else if (e.key.code == sf::Keyboard::Up){
                 kartDuJoueur.avance();
             }
 
-            else if (e.key.code == sf::Keyboard::Left)
-                kartDuJoueur.tourneAGauche();
 
-            else if (e.key.code == sf::Keyboard::Right)
+            else if (e.key.code == sf::Keyboard::Right){
                 kartDuJoueur.tourneADroite();
-
-            else if (e.key.code == sf::Keyboard::Space){
-              kartDuJoueur.freiner();
             }
+
+            else if (e.key.code == sf::Keyboard::Left){
+                kartDuJoueur.tourneAGauche();
+            }
+
+
+
+
+
 
 
 
@@ -332,8 +341,6 @@ int main() {
 
             else if (e.key.code == sf::Keyboard::Space)
                 kartDuJoueur.stopFreiner();
-		std::cout << "x: " << kartDuJoueur.getPosition().x << ", y: " << kartDuJoueur.getPosition().y << ", z: " << kartDuJoueur.getPosition().z << std::endl;
-
             break;
         default:
           break;
@@ -346,5 +353,6 @@ int main() {
   } while (!demandeAQuitter);
 
   world3D.deleteGraphique();
+  music.stop();
 	return EXIT_SUCCESS;
 }

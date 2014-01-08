@@ -109,7 +109,7 @@ void Kart::recule(){
 }
 
 void Kart::tourneAGauche(){
-  vitesseAngulaireCourante = specifications.vitesseAngulaire;
+  vitesseAngulaireCourante =  specifications.vitesseAngulaire;
 }
 
 void Kart::tourneADroite(){

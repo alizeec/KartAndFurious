@@ -25,3 +25,6 @@ size 33.558594 -10.360352 9.874023
 FrictionArea Lattice.008
 location -13.539940 2.402738 11.372378
 size 7.802734 -10.360352 9.874023
+FrictionArea Lattice.009
+location 0 0 0
+size 1 1 1
