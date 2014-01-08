@@ -1,5 +1,6 @@
 #include <glm/glm.hpp>
 #include <string>
+#include <iostream>
 #include <vector>
 #include "Mesh.hpp"
 #include "initGraphique.hpp"
@@ -21,6 +22,10 @@ void worldGraphique::initGraphisme(Kart kart, Map map){
     Mesh* kart3D_IA1=new(Mesh);
     kart3D_IA1->loadFromFile(map.getIA());
     this->listeMesh.push_back(kart3D_IA1);
+
+    Mesh* bonus=new(Mesh);
+    bonus->loadFromFile("data/etoile.DAE");
+    this->listeMesh.push_back(bonus);
 
 
 }

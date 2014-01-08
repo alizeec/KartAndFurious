@@ -84,16 +84,16 @@ public:
 
   //Met à jour le Kart en fonction de sa vitesse, sa vitesse angulaire
   //sa position actuelle et son orientation actuelle
-  void mettreAJour(sf::Time elapsedTimeInSecond);
+   void mettreAJour(sf::Time elapsedTimeInSecond);
 
   //Donne les ordres au Kart.
   //Modifient *vitesse* :
-  void avance();
-  void recule();
+   void avance();
+   void recule();
 
   //Modifient vitesseAngulaire:
-  void tourneAGauche();
-  void tourneADroite();
+   void tourneAGauche();
+   void tourneADroite();
 
   //Met à zéro vitesse
   void stopAvancer();

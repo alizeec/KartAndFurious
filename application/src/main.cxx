@@ -46,7 +46,7 @@ int main() {
 
   /* initialisation de la map */
   Map map;
-  LoadKAFMap(&map,"KAF/map1.KAF");
+  LoadKAFMap(&map,"KAF/map.KAF");
   LoadKAFCollision(&map,"KAF/mapFriction.KAF");
   LoadKAFCheckpoint(&map, "KAF/mapCheckpoint.KAF");
 
@@ -104,6 +104,7 @@ int main() {
     //C'est lui qui se charge d'envoyer la bonne matrice modele au shaderProgram
     world3D.listeMesh[1]->afficher(shaderProgram);
     world3D.listeMesh[2]->afficher(shaderProgram);
+    world3D.listeMesh[3]->afficher(shaderProgram);
 
 
 
@@ -194,19 +195,19 @@ demandeAQuitter = true;
             if (e.key.code == sf::Keyboard::Down)
                 kartDuJoueur.recule();
 
-            if (e.key.code == sf::Keyboard::Up){
+            else if (e.key.code == sf::Keyboard::Up){
                 kartDuJoueur.avance();
             }
 
-            if (e.key.code == sf::Keyboard::Space){
-              kartDuJoueur.freiner();
-            }
-
-            if (e.key.code == sf::Keyboard::Left)
+            else if (e.key.code == sf::Keyboard::Left)
                 kartDuJoueur.tourneAGauche();
 
-            if (e.key.code == sf::Keyboard::Right)
+            else if (e.key.code == sf::Keyboard::Right)
                 kartDuJoueur.tourneADroite();
+
+            else if (e.key.code == sf::Keyboard::Space){
+              kartDuJoueur.freiner();
+            }
 
 
 

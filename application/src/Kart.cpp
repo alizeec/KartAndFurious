@@ -35,7 +35,7 @@ void Kart::mettreAJour(sf::Time elapsedTime)
   //Calcul de la nouvelle direction en fonction de l'angularSpeed
   if (vitesse != 0.f)
   {
-    angleDirection += vitesseAngulaireCourante * (elapsedTime.asSeconds()); //en degres/secondes
+    angleDirection +=  vitesseAngulaireCourante * (elapsedTime.asSeconds()); //en degres/secondes
   }
   orientation = glm::angleAxis(angleDirection, glm::vec3(0.f, 1.f, 0.f));
 
