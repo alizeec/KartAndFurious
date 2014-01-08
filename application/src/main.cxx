@@ -81,13 +81,14 @@ std::cout<< map.getChemin()<<std::endl;
  shaderProgram.use();
 
    //pour la camera
-  const glm::vec3 initialDirection=glm::vec3(0.f,0.f,3.f);
+
+   glm::vec3 currentCamera=glm::vec3(0.f,0.f,2.f);
 
   sf::Clock clock;
 
-  sf::Music music; if (!music.openFromFile("data/1.ogg")) return -1;
+  sf::Music music; if (!music.openFromFile("music/1.ogg")) return -1;
 
-  music.play();
+  //music.play();
 
 
   //--------- BOUCLE DE JEU ---------------
@@ -115,7 +116,7 @@ std::cout<< map.getChemin()<<std::endl;
 
 
     // gestion de la caméra
-    glm::vec3 cameraPosition = kartDuJoueur.getPosition()+ glm::vec3(0.f,4.f,0.f)+ glm::toMat3(kartDuJoueur.getOrientation())* initialDirection;
+    glm::vec3 cameraPosition = kartDuJoueur.getPosition()+ glm::vec3(0.f,2.f,0.f)+ glm::toMat3(kartDuJoueur.getOrientation())* currentCamera;
     glm::vec3 cameraDirection= kartDuJoueur.getPosition() ;
 
    glm::mat4 camera = glm::lookAt(cameraPosition,cameraDirection, glm::vec3(0.f,1.f, 0.f));
@@ -317,6 +318,14 @@ std::cout<< map.getChemin()<<std::endl;
                 kartDuJoueur.tourneAGauche();
             }
 
+          else if (e.key.code == sf::Keyboard::B){
+              currentCamera[2]=2.f;
+          }
+
+          else if (e.key.code == sf::Keyboard::F){
+
+              currentCamera[2]=-2.f;
+          }
 
 
 
