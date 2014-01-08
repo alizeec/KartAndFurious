@@ -78,7 +78,7 @@ public:
   virtual ~Kart();
   void updatePosition(glm::vec3 nouvellePosition);
   void updateOrientation(float nouvelleDirection);
-  bool etatFreinage = false;
+  bool etatFreinage;
 
 
 

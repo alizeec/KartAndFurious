@@ -50,6 +50,7 @@ int main() {
   LoadKAFCollision(&map,"KAF/mapFriction.KAF");
   LoadKAFCheckpoint(&map, "KAF/mapCheckpoint.KAF");
 
+  int numPoint = 0;
   Point3D current_point = map.trajet[0];
 
 
@@ -57,6 +58,7 @@ int main() {
 
   //Création du Kart "logique" qui va contenir le code de déplacement
   Kart kartDuJoueur;
+  kartDuJoueur.etatFreinage = false;
   kartDuJoueur.updatePosition(map.getLigneDepartPosition());
   kartDuJoueur.updateOrientation(map.getLigneDepartAngle());
   LoadKAFKart(&kartDuJoueur,"KAF/kart2.KAF");
@@ -66,6 +68,9 @@ int main() {
   Kart IA1;
   IA1.updatePosition(map.getLigneDepartPosition()+glm::vec3(0.f,0.f,2.f));
   IA1.updateOrientation(map.getLigneDepartAngle());
+
+  float current_angle = IA1.angleDirection;
+  glm::vec3 current_position = IA1.getPosition();
 
   //initialisation du world3D, qui contiendra tous les Mesh
   worldGraphique world3D;
@@ -128,42 +133,141 @@ int main() {
 
 
     //-------------- CODE "APPLICATIF"(la logique du jeu quoi, + gestion des évènements) ----------
-
+	IA1.etatFreinage = false;
     //On met à jour le Kart "logique" du joueur par rapport aux évènements claviers
-    //std::cout << IA1.getPosition().x - current_point.x << "\n";
-   /* if(IA1.getPosition().x - current_point.x < 0.001){
-	//std::cout<<"TOURNER \n";
-	if(IA1.getPosition().x < current_point.x){
-    		IA1.tourneAGauche();
-		//IA1.avance();
-	}else{
-		IA1.tourneADroite();
-		//IA1.avance();
+     float distanceZ = fabs(IA1.getPosition().z - current_point.z);
+    float distanceX = fabs(IA1.getPosition().x - current_point.x);   
+    if(current_angle > 315 && current_angle <45){
+	std::cout << "1 \n" << std::endl;
+	if(PointZ == false){	
+		if(fabs(IA1.getPosition().z - current_point.z) > 2){
+			if(current_point.z < current_position.z){
+				IA1.avance();
+			}
+		}else{
+			PointZ = true;
+		}
 	}
-    }else{
-	//std::cout<<"STOOOOOOOP TOURNER \n";
-	PointX = true;
-	IA1.stopTourner();
-    } 
-    if(IA1.getPosition().z - current_point.z > -0.001){
-	//std::cout<<"AVANCER \n";
-	if(IA1.getPosition().z < current_point.z){
-    		IA1.avance();
-	}else{
-		IA1.avance();
+		
+	if(PointX == false){
+		if(distanceZ <= distanceX){
+			if(fabs(IA1.getPosition().x - current_point.x) > 2){
+				if(current_point.x > current_position.x){
+					IA1.tourneADroite();
+				}else{
+					IA1.tourneAGauche();
+				}
+			}else{
+				PointX = true;
+				//IA1.stopTourner();
+			}
+		}
 	}
-    }else{
-	//std::cout<<"STOOOOOOOP AVANCER \n";
-
-	PointZ = true;
-	IA1.stopAvancer();
+    }else if(current_angle > 45 && current_angle <135){	
+	//std::cout << "2 \n" << std::endl;	
+	if(PointZ == false){
+		//std::cout << fabs(IA1.getPosition().z - current_point.z) << "\n" << std::endl;
+		if(distanceZ >= distanceX){	
+			if(fabs(IA1.getPosition().z - current_point.z) > 2){
+				if(numPoint >=4) std::cout << fabs(IA1.getPosition().z - current_point.z) << "\n" << std::endl;
+				if(current_point.z > current_position.z){
+					//std::cout << "gauche \n";
+					IA1.tourneAGauche();
+				}else{
+					//std::cout << "droite \n";
+					IA1.tourneADroite();
+				}
+			}else{	
+				std::cout<<"stop tourner \n";				
+				PointZ = true;
+				IA1.stopTourner();
+			}
+		}
+	}		
+	if(PointX == false){	
+		if(fabs(IA1.getPosition().x - current_point.x) > 2){
+			//std::cout << IA1.getPosition().x << std::endl;
+			if(current_point.x < current_position.x){
+				IA1.avance();
+			}
+		}else{	
+			std::cout<<"stop avancer \n";		
+			PointX = true;
+		}
+	}
+	
+    }else if(current_angle > 135 && current_angle <225){
+	std::cout << "3 \n" << std::endl;	
+	if(PointZ == false){	
+		if(fabs(IA1.getPosition().z - current_point.z) > 1){
+			if(current_point.z > current_position.z){
+				IA1.avance();
+			}
+		}else{
+			PointZ = true;
+		}
+	}
+		
+	if(PointX == false){
+		if(distanceZ <= distanceX){
+			if(fabs(IA1.getPosition().x - current_point.x) > 2){
+				if(current_point.x > current_position.x){
+											
+					IA1.tourneAGauche();
+				}else{
+					//std::cout << "droite \n";	
+					IA1.tourneADroite();
+				}
+			}else{			
+				PointX = true;
+				//IA1.stopTourner();
+			}
+		}
+	}
+    }else if(current_angle > 225 && current_angle <315){
+	std::cout << "4 \n" << std::endl;
+	if(PointX == false){	
+		if(fabs(IA1.getPosition().x - current_point.x) > 1){
+			if(current_point.x > current_position.x){
+				IA1.avance();
+			}
+		}else{
+			PointX = true;
+		}
+	}
+		
+	if(PointZ == false){
+		if(distanceZ >= distanceX){
+			if(fabs(IA1.getPosition().z - current_point.z) > 2){
+				if(current_point.z > current_position.z){
+					IA1.tourneADroite();
+				}else{
+					IA1.tourneAGauche();
+				}
+			}else{
+				PointZ = true;
+				//IA1.stopTourner();
+			}
+		}
+	}
     }
 
-    if(PointX == true){
-	std::cout<<"x:"<<IA1.getPosition().x << "\n";
-	//std::cout<<"z:"<<IA1.getPosition().z << "\n";
-	std::cout<<"STOOOOOOOP \n";
-demandeAQuitter = true;
+    if(PointX == true && PointZ == true){
+	//std::cout << "STOP \n" << std::endl;
+	numPoint++;
+	current_angle = IA1.angleDirection;
+		//std::cout << numPoint << "\n";
+	if(numPoint >= 5){
+		/*std::cout << IA1.getPosition().x << "\n";
+		std::cout << IA1.getPosition().z << "\n";*/
+		IA1.stopTourner();
+		IA1.stopAvancer();
+	}else{		
+		current_position = IA1.getPosition();		
+		current_point = map.trajet[numPoint];
+		PointX = false;
+		PointZ = false;
+	}
     }
     //std::cout << "z : " <<IA1.getPosition().z << "\n";
     //std::cout << "z : " <<IA1.getPosition().x << "\n";
@@ -228,6 +332,7 @@ demandeAQuitter = true;
 
             else if (e.key.code == sf::Keyboard::Space)
                 kartDuJoueur.stopFreiner();
+		std::cout << "x: " << kartDuJoueur.getPosition().x << ", y: " << kartDuJoueur.getPosition().y << ", z: " << kartDuJoueur.getPosition().z << std::endl;
 
             break;
         default:
