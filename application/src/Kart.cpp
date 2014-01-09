@@ -2,6 +2,8 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <iostream>
+#include <math.h>
+#include<glm/gtx/vector_angle.hpp>
 
 Kart::Kart()
     : position(0.f, 0.f, 0.f), orientation(glm::angleAxis(0.f, glm::vec3(0.f, 1.f, 0.f))),
@@ -150,3 +152,32 @@ const glm::quat& Kart::getOrientation() const
   {return orientation;}
 
 
+void IA::setPositionIA(sf::Time elapsedTimeInSecond, Map map){
+    const glm::vec3 directionInitiale = glm::vec3(0.f, 0.f, -1.f);
+
+
+    glm::vec3 vecdirecteur= glm::normalize(glm::toMat3(orientation)*directionInitiale);
+    float x= map.trajet[0].x-(this->getPosition()[0]);
+    float y= map.trajet[0].y-(this->getPosition()[1]);
+    float z= map.trajet[0].z-(this->getPosition()[2]);
+
+
+
+   glm::vec3 kartToCheckpoint=glm::vec3(x,y,z);
+   std::cout<<"position ia"<<vecdirecteur[0]<<","<<vecdirecteur[1]<<","<<vecdirecteur[2]<<std::endl;
+
+   //angleDirection= glm::orientedAngle(vecdirecteur,kartToCheckpoint,glm::vec3(0.f,1.f,0.f));
+   float produitscalaire= kartToCheckpoint[0]*vecdirecteur[0]+kartToCheckpoint[1]*vecdirecteur[1]+kartToCheckpoint[2]*vecdirecteur[2];
+   //std::cout<<"produit scalaire"<<sqrt(kartToCheckpoint[0]*kartToCheckpoint[0]+kartToCheckpoint[1]*kartToCheckpoint[1]+kartToCheckpoint[2]*kartToCheckpoint[2])<<std::endl;
+    angleDirection= acos(produitscalaire/51.f);
+    angleDirection = angleDirection*(180/M_PI);
+    std::cout<<"angle"<<angleDirection<<std::endl;
+    //angleDirection = 45.f;
+
+    avance();
+    mettreAJour(elapsedTimeInSecond);
+    //std::cout<<"vec directeur"<<kartToCheckpoint[0]<<","<<kartToCheckpoint[2]<<std::endl;
+    if (fabs(this->getPosition()[0]-map.trajet[0].x)<4.f && fabs(this->getPosition()[2]-map.trajet[0].z)<4.f){
+        stopAvancer();
+    }
+}

@@ -31,7 +31,7 @@ int main() {
   //------------- INITIALISATION ---------------------
   //Création de la fenetre et initialisation de GLEW
   sf::RenderWindow window;
-  window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Fat and Furious");
+  window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Kart and Furious");
   GLenum glewCode = glewInit();
   if(GLEW_OK != glewCode) {
     std::cerr << "Unable to initialize GLEW : " << glewGetErrorString(glewCode) << std::endl;
@@ -64,7 +64,7 @@ std::cout<< map.getChemin()<<std::endl;
   LoadKAFKart(&kartDuJoueur,"KAF/kart2.KAF");
 
   //Création des kart des autres joueurs (IA)
-  Kart IA1;
+  IA IA1;
   IA1.updatePosition(map.getLigneDepartPosition()+glm::vec3(0.f,0.f,2.f));
   IA1.updateOrientation(map.getLigneDepartAngle());
 
@@ -87,6 +87,7 @@ std::cout<< map.getChemin()<<std::endl;
   sf::Clock clock;
 
   sf::Music music; if (!music.openFromFile("music/1.ogg")) return -1;
+
 
   //music.play();
 
@@ -121,6 +122,7 @@ std::cout<< map.getChemin()<<std::endl;
 
    glm::mat4 camera = glm::lookAt(cameraPosition,cameraDirection, glm::vec3(0.f,1.f, 0.f));
 
+
     //Le projeté 2D de la caméra (matrice de projection)
     glm::mat4 cameraProjetee =  glm::perspective(90.f, WINDOW_WIDTH / (float) WINDOW_HEIGHT, 0.1f, 1000.f) * camera;
 
@@ -132,150 +134,16 @@ std::cout<< map.getChemin()<<std::endl;
     shaderProgram.setUniform(viewIndex, camera);
 
 
-
     //-------------- CODE "APPLICATIF"(la logique du jeu quoi, + gestion des évènements) ----------
-	IA1.etatFreinage = false;
-    //On met à jour le Kart "logique" du joueur par rapport aux évènements claviers
-     float distanceZ = fabs(IA1.getPosition().z - current_point.z);
-    float distanceX = fabs(IA1.getPosition().x - current_point.x);   
-    if(current_angle > 315 && current_angle <45){
-	std::cout << "1 \n" << std::endl;
-	if(PointZ == false){	
-		if(fabs(IA1.getPosition().z - current_point.z) > 2){
-			if(current_point.z < current_position.z){
-				IA1.avance();
-			}
-		}else{
-			PointZ = true;
-		}
-	}
-		
-	if(PointX == false){
-		if(distanceZ <= distanceX){
-			if(fabs(IA1.getPosition().x - current_point.x) > 2){
-				if(current_point.x > current_position.x){
-					IA1.tourneADroite();
-				}else{
-					IA1.tourneAGauche();
-				}
-			}else{
-				PointX = true;
-				//IA1.stopTourner();
-			}
-		}
-	}
-    }else if(current_angle > 45 && current_angle <135){	
-	//std::cout << "2 \n" << std::endl;	
-	if(PointZ == false){
-		//std::cout << fabs(IA1.getPosition().z - current_point.z) << "\n" << std::endl;
-		if(distanceZ >= distanceX){	
-			if(fabs(IA1.getPosition().z - current_point.z) > 2){
-				if(numPoint >=4) std::cout << fabs(IA1.getPosition().z - current_point.z) << "\n" << std::endl;
-				if(current_point.z > current_position.z){
-					//std::cout << "gauche \n";
-					IA1.tourneAGauche();
-				}else{
-					//std::cout << "droite \n";
-					IA1.tourneADroite();
-				}
-			}else{	
-				std::cout<<"stop tourner \n";				
-				PointZ = true;
-				IA1.stopTourner();
-			}
-		}
-	}		
-	if(PointX == false){	
-		if(fabs(IA1.getPosition().x - current_point.x) > 2){
-			//std::cout << IA1.getPosition().x << std::endl;
-			if(current_point.x < current_position.x){
-				IA1.avance();
-			}
-		}else{	
-			std::cout<<"stop avancer \n";		
-			PointX = true;
-		}
-	}
-	
-    }else if(current_angle > 135 && current_angle <225){
-	std::cout << "3 \n" << std::endl;	
-	if(PointZ == false){	
-		if(fabs(IA1.getPosition().z - current_point.z) > 1){
-			if(current_point.z > current_position.z){
-				IA1.avance();
-			}
-		}else{
-			PointZ = true;
-		}
-	}
-		
-	if(PointX == false){
-		if(distanceZ <= distanceX){
-			if(fabs(IA1.getPosition().x - current_point.x) > 2){
-				if(current_point.x > current_position.x){
-											
-					IA1.tourneAGauche();
-				}else{
-					//std::cout << "droite \n";	
-					IA1.tourneADroite();
-				}
-			}else{			
-				PointX = true;
-				//IA1.stopTourner();
-			}
-		}
-	}
-    }else if(current_angle > 225 && current_angle <315){
-	std::cout << "4 \n" << std::endl;
-	if(PointX == false){	
-		if(fabs(IA1.getPosition().x - current_point.x) > 1){
-			if(current_point.x > current_position.x){
-				IA1.avance();
-			}
-		}else{
-			PointX = true;
-		}
-	}
-		
-	if(PointZ == false){
-		if(distanceZ >= distanceX){
-			if(fabs(IA1.getPosition().z - current_point.z) > 2){
-				if(current_point.z > current_position.z){
-					IA1.tourneADroite();
-				}else{
-					IA1.tourneAGauche();
-				}
-			}else{
-				PointZ = true;
-				//IA1.stopTourner();
-			}
-		}
-	}
-    }
 
-    if(PointX == true && PointZ == true){
-	//std::cout << "STOP \n" << std::endl;
-	numPoint++;
-	current_angle = IA1.angleDirection;
-		//std::cout << numPoint << "\n";
-	if(numPoint >= 5){
-		/*std::cout << IA1.getPosition().x << "\n";
-		std::cout << IA1.getPosition().z << "\n";*/
-		IA1.stopTourner();
-		IA1.stopAvancer();
-	}else{		
-		current_position = IA1.getPosition();		
-		current_point = map.trajet[numPoint];
-		PointX = false;
-		PointZ = false;
-	}
-    }
-    //std::cout << "z : " <<IA1.getPosition().z << "\n";
-    //std::cout << "z : " <<IA1.getPosition().x << "\n";
 
     sf::Time elapsed = clock.restart();
     kartDuJoueur.mettreAJour(elapsed);
-    IA1.mettreAJour(elapsed);
+    //IA1.mettreAJour(elapsed);
+
+
+    IA1.setPositionIA(elapsed, map);
+
 
 
     detectionZonesRallentissantes(map,&kartDuJoueur);
@@ -326,6 +194,11 @@ std::cout<< map.getChemin()<<std::endl;
 
               currentCamera[2]=-2.f;
           }
+
+          else if (e.key.code== sf::Keyboard::A){
+              std::cout<<"kartdujouer"<<kartDuJoueur.getPosition()[0]<<","<<kartDuJoueur.getPosition()[2]<<std::endl;
+          }
+
 
 
 

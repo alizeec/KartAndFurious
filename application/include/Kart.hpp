@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include "Map.hpp"
 
 /**
  * @brief The Kart class
@@ -84,25 +85,25 @@ public:
 
   //Met à jour le Kart en fonction de sa vitesse, sa vitesse angulaire
   //sa position actuelle et son orientation actuelle
-  virtual void mettreAJour(sf::Time elapsedTimeInSecond);
+   void mettreAJour(sf::Time elapsedTimeInSecond);
 
   //Donne les ordres au Kart.
   //Modifient *vitesse* :
-  virtual  void avance();
-  virtual void recule();
+    void avance();
+   void recule();
 
   //Modifient vitesseAngulaire:
-  virtual void tourneAGauche();
-  virtual void tourneADroite();
+   void tourneAGauche();
+   void tourneADroite();
 
   //Met à zéro vitesse
- virtual void stopAvancer();
+  void stopAvancer();
 
   //Met à zéro vitesseAngulaire
-  virtual void stopTourner();
+   void stopTourner();
 
-  virtual void freiner();
-  virtual void stopFreiner();
+   void freiner();
+   void stopFreiner();
 
   const glm::vec3& getPosition() const;
   const glm::quat& getOrientation() const;
@@ -119,6 +120,11 @@ public:
 
   StatutAcceleration accelerationStatut;
   StatutSens statutsens;
+};
+
+class IA : public Kart{
+    public:
+    void setPositionIA(sf::Time elapsedTimeInSecond, Map map);
 };
 
 #endif

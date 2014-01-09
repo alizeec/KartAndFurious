@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-PROJECT(FatAndFurious)
+PROJECT(KartAndFurious)
 find_package(OpenGL REQUIRED)
 find_package(SFML 2.1 COMPONENTS graphics window system audio REQUIRED)
 
