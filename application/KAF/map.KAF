@@ -1,6 +1,6 @@
 map
-application/data/map1_zoned.dae
-application/data/kart3.dae
+data/map1_zoned.dae
+data/kart3.dae
 5 3 -2 90
 4
 -11 3 -11

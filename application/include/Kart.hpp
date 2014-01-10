@@ -127,12 +127,15 @@ class IA : public Kart{
     void setPositionIA(sf::Time elapsedTimeInSecond, Map map);
     void setTrueTargetCalculate();
     void setFalseTargetCalculate();
-
+    void incrementCursor();
+    int getCursor();
+    void initCursor();
     void setAngle(float newangle);
 
-private:
+//private:
     bool targetCalculate;
     float angleIA;
+    int Cursor;
 };
 
 #endif

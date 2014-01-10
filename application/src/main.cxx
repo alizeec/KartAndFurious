@@ -54,7 +54,7 @@ int main() {
   }
 
    sf::Image image;
-    if (!image.loadFromFile("application/data/intro.png"))
+    if (!image.loadFromFile("data/intro.png"))
     {
         std::cout << "error" <<std::endl;
     }
@@ -68,7 +68,7 @@ int main() {
     glBindTexture(GL_TEXTURE_2D, 0);
 
 
-    glimac::Program program = glimac::loadProgram("application/shaders/tex2dTP8.vs.glsl", "application/shaders/tex2dTP8.fs.glsl");
+    glimac::Program program = glimac::loadProgram("shaders/tex2dTP8.vs.glsl", "shaders/tex2dTP8.fs.glsl");
     program.use();
 
 
@@ -151,7 +151,7 @@ int main() {
     glDeleteTextures(1,&texture);
 
     sf::Image image2;
-    if (!image2.loadFromFile("application/data/choix_circuit.png"))
+    if (!image2.loadFromFile("data/choix_circuit.png"))
     {
         std::cout << "error" <<std::endl;
     }
@@ -212,12 +212,11 @@ int main() {
 	   {
 		    if (event.mouseButton.button == sf::Mouse::Left)
 		    {
-			//std::cout << "the right button was pressed" << std::endl;
 			if(event.mouseButton.x >640 && 	event.mouseButton.x<930 && event.mouseButton.y >247 && event.mouseButton.y < 484){			
-				nomMap = "application/KAF/map.KAF";
+                nomMap = "KAF/map.KAF";
 				choixMap = false;
 			}else if(event.mouseButton.x >373 && 	event.mouseButton.x<688 && event.mouseButton.y >468 && event.mouseButton.y < 702){
-				nomMap = "application/KAF/map.KAF";
+                nomMap = "KAF/map.KAF";
 				choixMap = false;
 			}	
 		    }
@@ -232,7 +231,7 @@ int main() {
     glDeleteTextures(1,&texture);
 
     sf::Image image3;
-    if (!image3.loadFromFile("application/data/choix_voiture.png"))
+    if (!image3.loadFromFile("data/choix_voiture.png"))
     {
         std::cout << "error" <<std::endl;
     }
@@ -297,19 +296,19 @@ int main() {
 			std::cout<< "x : " << event.mouseButton.x << std::endl; 
 			std::cout<< "y : " << event.mouseButton.y << std::endl; 
 			if(event.mouseButton.x >660 && 	event.mouseButton.x<1010 && event.mouseButton.y >220 && event.mouseButton.y < 460){			
-				nomKartJoueur = "application/KAF/kart2.KAF";
-				nomKartIA = "application/KAF/kart3.KAF";
-				nomKartIA2 = "application/KAF/kart1.KAF";
+                nomKartJoueur = "KAF/kart2.KAF";
+                nomKartIA = "KAF/kart3.KAF";
+                nomKartIA2 = "KAF/kart1.KAF";
 				choixKart = false;
 			}else if(event.mouseButton.x >680 && 	event.mouseButton.x<1010 && event.mouseButton.y >490 && event.mouseButton.y < 740){
-				nomKartJoueur = "application/KAF/kart1.KAF";
-				nomKartIA = "application/KAF/kart2.KAF";
-				nomKartIA2 = "application/KAF/kart3.KAF";
+                nomKartJoueur = "KAF/kart1.KAF";
+                nomKartIA = "KAF/kart2.KAF";
+                nomKartIA2 = "KAF/kart3.KAF";
 				choixKart = false;
 			}else if(event.mouseButton.x >300 && 	event.mouseButton.x<670 && event.mouseButton.y >490 && event.mouseButton.y < 740){
-				nomKartJoueur = "application/KAF/kart3.KAF";
-				nomKartIA = "application/KAF/kart1.KAF";
-				nomKartIA2 = "application/KAF/kart2.KAF";
+                nomKartJoueur = "KAF/kart3.KAF";
+                nomKartIA = "KAF/kart1.KAF";
+                nomKartIA2 = "KAF/kart2.KAF";
 				choixKart = false;
 			}	
 		    }
@@ -324,7 +323,7 @@ int main() {
     glDeleteTextures(1,&texture);
 
 sf::Image image4;
-    if (!image4.loadFromFile("application/data/commandes.png"))
+    if (!image4.loadFromFile("data/commandes.png"))
     {
         std::cout << "error" <<std::endl;
     }
@@ -409,7 +408,7 @@ sf::Image image4;
   int rand_music = (rand() % 5) + 1;
 
   // Creation variables pour chemin du fichier
-  std::string way_start = "application/music/";
+  std::string way_start = "music/";
   std::string way_end = ".ogg";
   std::string way_access;
 
@@ -427,8 +426,8 @@ sf::Image image4;
   Map map;
 
   LoadKAFMap(&map,nomMap);
-  LoadKAFCollision(&map,"application/KAF/mapFriction.KAF");
-  LoadKAFCheckpoint(&map, "application/KAF/mapCheckpoint.KAF");
+  LoadKAFCollision(&map,"KAF/mapFriction.KAF");
+  LoadKAFCheckpoint(&map, "KAF/mapCheckpoint.KAF");
 std::cout<< map.getChemin()<<std::endl;
   int numPoint = 0;
   Point3D current_point = map.trajet[0];
@@ -445,6 +444,8 @@ std::cout<< map.getChemin()<<std::endl;
   IA IA1;
   IA1.updatePosition(map.getLigneDepartPosition()+glm::vec3(0.f,0.f,2.f));
   IA1.updateOrientation(map.getLigneDepartAngle());
+    IA1.setFalseTargetCalculate();
+    IA1.initCursor();
 
   float current_angle = IA1.angleDirection;
   glm::vec3 current_position = IA1.getPosition();
@@ -455,7 +456,7 @@ std::cout<< map.getChemin()<<std::endl;
 
  // création du shader de base
  glimac::ShaderProgram shaderProgram;
- shaderProgram.loadProgram("application/shaders/Simple3DVS.glsl","application/shaders/SimpleFS.glsl");
+ shaderProgram.loadProgram("shaders/Simple3DVS.glsl","shaders/SimpleFS.glsl");
  shaderProgram.use();
 
    //pour la camera
