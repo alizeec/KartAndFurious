@@ -24,7 +24,7 @@ void worldGraphique::initGraphisme(Kart kart, Map map){
     this->listeMesh.push_back(kart3D_IA1);
 
     Mesh* bonus=new(Mesh);
-    bonus->loadFromFile("data/etoile.DAE");
+    bonus->loadFromFile("application/data/etoile.DAE");
     this->listeMesh.push_back(bonus);
 
 
