@@ -30,6 +30,8 @@
 int main() {
   const size_t WINDOW_WIDTH = 1024;
   const size_t WINDOW_HEIGHT = 768;
+  bool PointX = false;
+  bool PointZ = false;
   bool intro = true;
   bool choixMap = true;
   bool choixKart = true;
@@ -53,8 +55,12 @@ int main() {
     return EXIT_FAILURE;
   }
 
+   sf::Music music_intro;
+  if (!music_intro.openFromFile("application/music/1.ogg")) return -1;
+   music_intro.play();
+
    sf::Image image;
-    if (!image.loadFromFile("data/intro.png"))
+    if (!image.loadFromFile("application/data/intro.png"))
     {
         std::cout << "error" <<std::endl;
     }
@@ -68,7 +74,7 @@ int main() {
     glBindTexture(GL_TEXTURE_2D, 0);
 
 
-    glimac::Program program = glimac::loadProgram("shaders/tex2dTP8.vs.glsl", "shaders/tex2dTP8.fs.glsl");
+    glimac::Program program = glimac::loadProgram("application/shaders/tex2dTP8.vs.glsl", "application/shaders/tex2dTP8.fs.glsl");
     program.use();
 
 
@@ -151,7 +157,7 @@ int main() {
     glDeleteTextures(1,&texture);
 
     sf::Image image2;
-    if (!image2.loadFromFile("data/choix_circuit.png"))
+    if (!image2.loadFromFile("application/data/choix_circuit.png"))
     {
         std::cout << "error" <<std::endl;
     }
@@ -213,15 +219,10 @@ int main() {
 		    if (event.mouseButton.button == sf::Mouse::Left)
 		    {
 			if(event.mouseButton.x >640 && 	event.mouseButton.x<930 && event.mouseButton.y >247 && event.mouseButton.y < 484){			
-                nomMap = "KAF/map.KAF";
-                nomFriction = "KAF/mapFriction.KAF";
-                nomCheckpoint = "KAF/mapCheckpoint.KAF";
-
+                nomMap = "application/KAF/map.KAF";
 				choixMap = false;
 			}else if(event.mouseButton.x >373 && 	event.mouseButton.x<688 && event.mouseButton.y >468 && event.mouseButton.y < 702){
-                nomMap = "KAF/map2.KAF";
-                nomFriction = "KAF/mapFriction2.KAF";
-                nomCheckpoint = "KAF/mapCheckpoint2.KAF";
+                nomMap = "application/KAF/map.KAF";
 				choixMap = false;
 			}	
 		    }
@@ -236,7 +237,7 @@ int main() {
     glDeleteTextures(1,&texture);
 
     sf::Image image3;
-    if (!image3.loadFromFile("data/choix_voiture.png"))
+    if (!image3.loadFromFile("application/data/choix_voiture.png"))
     {
         std::cout << "error" <<std::endl;
     }
@@ -301,19 +302,19 @@ int main() {
 			std::cout<< "x : " << event.mouseButton.x << std::endl; 
 			std::cout<< "y : " << event.mouseButton.y << std::endl; 
 			if(event.mouseButton.x >660 && 	event.mouseButton.x<1010 && event.mouseButton.y >220 && event.mouseButton.y < 460){			
-                nomKartJoueur = "KAF/kart2.KAF";
-                nomKartIA = "KAF/kart3.KAF";
-                nomKartIA2 = "KAF/kart1.KAF";
+                nomKartJoueur = "application/KAF/kart2.KAF";
+                nomKartIA = "application/KAF/kart3.KAF";
+                nomKartIA2 = "application/KAF/kart1.KAF";
 				choixKart = false;
 			}else if(event.mouseButton.x >680 && 	event.mouseButton.x<1010 && event.mouseButton.y >490 && event.mouseButton.y < 740){
-                nomKartJoueur = "KAF/kart1.KAF";
-                nomKartIA = "KAF/kart2.KAF";
-                nomKartIA2 = "KAF/kart3.KAF";
+                nomKartJoueur = "application/KAF/kart1.KAF";
+                nomKartIA = "application/KAF/kart2.KAF";
+                nomKartIA2 = "application/KAF/kart3.KAF";
 				choixKart = false;
 			}else if(event.mouseButton.x >300 && 	event.mouseButton.x<670 && event.mouseButton.y >490 && event.mouseButton.y < 740){
-                nomKartJoueur = "KAF/kart3.KAF";
-                nomKartIA = "KAF/kart1.KAF";
-                nomKartIA2 = "KAF/kart2.KAF";
+                nomKartJoueur = "application/KAF/kart3.KAF";
+                nomKartIA = "application/KAF/kart1.KAF";
+                nomKartIA2 = "application/KAF/kart2.KAF";
 				choixKart = false;
 			}	
 		    }
@@ -328,7 +329,7 @@ int main() {
     glDeleteTextures(1,&texture);
 
 sf::Image image4;
-    if (!image4.loadFromFile("data/commandes.png"))
+    if (!image4.loadFromFile("application/data/commandes.png"))
     {
         std::cout << "error" <<std::endl;
     }
@@ -406,14 +407,16 @@ sf::Image image4;
   glEnable(GL_DEPTH_TEST);
 
   //-----------------------------------------------------
-  // Initialisation du generateur de nbre aleatoire
+ 
+  music_intro.stop();
+ // Initialisation du generateur de nbre aleatoire
   srand(time(nullptr));
-
+  
   // Random entre 1 et 5
   int rand_music = (rand() % 5) + 1;
 
   // Creation variables pour chemin du fichier
-  std::string way_start = "music/";
+  std::string way_start = "application/music/";
   std::string way_end = ".ogg";
   std::string way_access;
 
@@ -461,7 +464,7 @@ std::cout<< map.getChemin()<<std::endl;
 
  // création du shader de base
  glimac::ShaderProgram shaderProgram;
- shaderProgram.loadProgram("shaders/Simple3DVS.glsl","shaders/SimpleFS.glsl");
+ shaderProgram.loadProgram("application/shaders/Simple3DVS.glsl","application/shaders/SimpleFS.glsl");
  shaderProgram.use();
 
    //pour la camera
@@ -472,6 +475,7 @@ std::cout<< map.getChemin()<<std::endl;
 
 
   music.play();
+
 
   //--------- BOUCLE DE JEU ---------------
   do
