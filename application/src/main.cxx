@@ -53,6 +53,10 @@ int main() {
     return EXIT_FAILURE;
   }
 
+   sf::Music music_intro;
+  if (!music_intro.openFromFile("application/music/1.ogg")) return -1;
+   music_intro.play();
+
    sf::Image image;
     if (!image.loadFromFile("application/data/intro.png"))
     {
@@ -402,9 +406,11 @@ sf::Image image4;
   glEnable(GL_DEPTH_TEST);
 
   //-----------------------------------------------------
-  // Initialisation du generateur de nbre aleatoire
+ 
+  music_intro.stop();
+ // Initialisation du generateur de nbre aleatoire
   srand(time(nullptr));
-
+  
   // Random entre 1 et 5
   int rand_music = (rand() % 5) + 1;
 
