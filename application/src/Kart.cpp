@@ -197,25 +197,30 @@ void IA::setPositionIA(sf::Time elapsedTimeInSecond, Map map){
    glm::vec3 kartToCheckpoint=glm::vec3(x,y,z);
 
    //boucle pour qu'il ne recalcule pas l'angle tant qu'il n'est pas arrivé à un noeud
-   if(this->targetCalculate==false){
+   //if(this->targetCalculate==false){
 
-   float produitscalaire= kartToCheckpoint[0]*vecdirecteur[0]+kartToCheckpoint[1]*vecdirecteur[1]+kartToCheckpoint[2]*vecdirecteur[2];
-   float result = produitscalaire/sqrt(kartToCheckpoint[0]*kartToCheckpoint[0]+kartToCheckpoint[1]*kartToCheckpoint[1]+kartToCheckpoint[2]*kartToCheckpoint[2]);
-
+   //float produitscalaire= kartToCheckpoint[0]*vecdirecteur[0]+kartToCheckpoint[1]*vecdirecteur[1]+kartToCheckpoint[2]*vecdirecteur[2];
+   //float result = produitscalaire/sqrt(kartToCheckpoint[0]*kartToCheckpoint[0]+kartToCheckpoint[1]*kartToCheckpoint[1]+kartToCheckpoint[2]*kartToCheckpoint[2]);
+   //glm::vec2 vecdirecteur2 = glm::vec2(vecdirecteur.x, vecdirecteur.z);
+   glm::vec2 kartToCheckpoint2 = glm::vec2(kartToCheckpoint.x, kartToCheckpoint.z);
+   float angle = glm::orientedAngle(glm::normalize(kartToCheckpoint2), glm::normalize(glm::vec2(0.0f,-1.0f)));
    //arrondissement à 2 decimale sinon acos est pas content
-    result= result*100;
+    /*result= result*100;
     result =floor(result);
-    result = result/100;
+    result = result/100;*/
+std::cout<<"result"<<angle<<std::endl;
+    //setTrueTargetCalculate();
+    //setAngle(this->angleIA+result);
+   //setAngle(angle);
+//}
 
-    setTrueTargetCalculate();
-    setAngle(this->angleIA+result);
-}
-
-   std::cout<<"angle before"<<angleIA<<std::endl;
-
-   angleDirection = acos(this->angleIA);
-   angleDirection += angleDirection*(180/M_PI);
-   std::cout<<"angle after"<<angleIA<<std::endl;
+   std::cout<<"angle before"<<angle<<std::endl;
+   angleDirection = angle;
+   //angleDirection = this->angleIA;
+   //angleDirection = acos(this->angleIA);
+   //std::cout<<"angle before"<<angleDirection*(180/M_PI)<<std::endl;
+   //angleDirection = angleDirection*(180/M_PI);
+   //std::cout<<"angle after"<<map.trajet[getCursor()].x<<std::endl;
 
    //avance();
     mettreAJour(elapsedTimeInSecond);
