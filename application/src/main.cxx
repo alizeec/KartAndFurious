@@ -7,6 +7,8 @@
 #include <cstdlib>
 #include <vector>
 #include <time.h>
+#include <sstream>
+
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include "Mesh.hpp"
@@ -18,6 +20,9 @@
 #include "initGraphique.hpp"
 #include "LoadKAF.hpp"
 #include "game.hpp"
+#include "Program.hpp"
+#include "Vertex2DUV.hpp"
+#include "Matrix2D.hpp"
 
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -27,6 +32,16 @@ int main() {
   const size_t WINDOW_HEIGHT = 768;
   bool PointX = false;
   bool PointZ = false;
+  bool intro = true;
+  bool choixMap = true;
+  bool choixKart = true;
+  bool commandes = true;
+  std::string nomMap;
+  std::string nomKartJoueur;
+  std::string nomKartIA;
+  std::string nomKartIA2;
+
+  bool demandeAQuitter = false;
 
   //------------- INITIALISATION ---------------------
   //Création de la fenetre et initialisation de GLEW
@@ -37,20 +52,384 @@ int main() {
     std::cerr << "Unable to initialize GLEW : " << glewGetErrorString(glewCode) << std::endl;
     return EXIT_FAILURE;
   }
+
+   sf::Image image;
+    if (!image.loadFromFile("application/data/intro.png"))
+    {
+        std::cout << "error" <<std::endl;
+    }
+    GLuint texture;
+    glGenTextures(1,  &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D( GL_TEXTURE_2D , 0,GL_RGBA, image.getSize().x,  image.getSize().y,  0,  GL_RGBA,  GL_UNSIGNED_BYTE,  image.getPixelsPtr());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+
+    glimac::Program program = glimac::loadProgram("application/shaders/tex2dTP8.vs.glsl", "application/shaders/tex2dTP8.fs.glsl");
+    program.use();
+
+
+    GLuint idProg3 = program.getGLId();
+    GLint location3= glGetUniformLocation(idProg3, "uTexture");
+
+  glimac::LowLevelVBO vbo;
+    vbo.bind(); // bindage
+
+
+    glimac::Vertex2DUV vertices[] = {
+	{ 1, -1, 1, 1 },	
+	{ -1, -1, 0, 1 },        
+        { -1, 1, 0 ,0},
+        { 1, 1, 1, 0 }
+    };
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices),vertices,GL_STATIC_DRAW ); // envoi des données
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+
+    glimac::VAO vao;
+    vao.bind();
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+
+
+    vbo.bind(); // bindage
+    glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE, sizeof(glimac::Vertex2DUV),(const void*) offsetof(glimac::Vertex2DUV, x)  );
+    glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,sizeof(glimac::Vertex2DUV),(const void*) offsetof(glimac::Vertex2DUV, u) );
+
+
+
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glBindVertexArray(0);
+
+    while (intro == true)
+    {
+
+	if(demandeAQuitter == true){
+		intro = false;
+	}
+
+        // Rendering code goes here
+        glClear(GL_COLOR_BUFFER_BIT);
+
+         vao.bind();
+        glBindTexture(GL_TEXTURE_2D, texture);
+
+       glUniform1i(location3, 0);
+        glDrawArrays(GL_QUADS,0,4);
+
+
+
+
+        glBindVertexArray(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+           if (event.type == sf::Event::MouseButtonPressed)
+	   {
+		    if (event.mouseButton.button == sf::Mouse::Left)
+		    {
+			if(event.mouseButton.x >0 && 	event.mouseButton.x<750 && event.mouseButton.y >470 && event.mouseButton.y < 530){			
+				intro = false;
+			}	
+		    }
+	   } 
+	   if (event.type == sf::Event::Closed){
+                window.close();
+                demandeAQuitter = true;
+	   }
+        }
+
+        window.display();
+    }
+
+    glDeleteTextures(1,&texture);
+
+    sf::Image image2;
+    if (!image2.loadFromFile("application/data/choix_circuit.png"))
+    {
+        std::cout << "error" <<std::endl;
+    }
+    GLuint texture2;
+    glGenTextures(1,  &texture2);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+    glTexImage2D( GL_TEXTURE_2D , 0,GL_RGBA, image2.getSize().x,  image2.getSize().y,  0,  GL_RGBA,  GL_UNSIGNED_BYTE,  image2.getPixelsPtr());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+
+    vbo.bind(); // bindage
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices),vertices,GL_STATIC_DRAW ); // envoi des données
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+
+    vao.bind();
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+
+
+    vbo.bind(); // bindage
+    glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE, sizeof(glimac::Vertex2DUV),(const void*) offsetof(glimac::Vertex2DUV, x)  );
+    glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,sizeof(glimac::Vertex2DUV),(const void*) offsetof(glimac::Vertex2DUV, u) );
+
+
+
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glBindVertexArray(0);
+
+    while (choixMap == true)
+    {
+
+
+
+        // Rendering code goes here
+        glClear(GL_COLOR_BUFFER_BIT);
+
+         vao.bind();
+        glBindTexture(GL_TEXTURE_2D, texture2);
+
+       glUniform1i(location3, 0);
+        glDrawArrays(GL_QUADS,0,4);
+
+
+
+
+        glBindVertexArray(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+           if (event.type == sf::Event::MouseButtonPressed)
+	   {
+		    if (event.mouseButton.button == sf::Mouse::Left)
+		    {
+			//std::cout << "the right button was pressed" << std::endl;
+			if(event.mouseButton.x >640 && 	event.mouseButton.x<930 && event.mouseButton.y >247 && event.mouseButton.y < 484){			
+				nomMap = "application/KAF/map.KAF";
+				choixMap = false;
+			}else if(event.mouseButton.x >373 && 	event.mouseButton.x<688 && event.mouseButton.y >468 && event.mouseButton.y < 702){
+				nomMap = "application/KAF/map.KAF";
+				choixMap = false;
+			}	
+		    }
+	   } 
+	   if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        window.display();
+    }
+
+    glDeleteTextures(1,&texture);
+
+    sf::Image image3;
+    if (!image3.loadFromFile("application/data/choix_voiture.png"))
+    {
+        std::cout << "error" <<std::endl;
+    }
+    GLuint texture3;
+    glGenTextures(1,  &texture3);
+    glBindTexture(GL_TEXTURE_2D, texture3);
+    glTexImage2D( GL_TEXTURE_2D , 0,GL_RGBA, image3.getSize().x,  image3.getSize().y,  0,  GL_RGBA,  GL_UNSIGNED_BYTE,  image3.getPixelsPtr());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    vbo.bind(); // bindage
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices),vertices,GL_STATIC_DRAW ); // envoi des données
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+
+    //glimac::VAO vao;
+    vao.bind();
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+
+
+    vbo.bind(); // bindage
+    glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE, sizeof(glimac::Vertex2DUV),(const void*) offsetof(glimac::Vertex2DUV, x)  );
+    glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,sizeof(glimac::Vertex2DUV),(const void*) offsetof(glimac::Vertex2DUV, u) );
+
+
+
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glBindVertexArray(0);
+
+    while (choixKart == true)
+    {
+
+
+
+        // Rendering code goes here
+        glClear(GL_COLOR_BUFFER_BIT);
+
+         vao.bind();
+        glBindTexture(GL_TEXTURE_2D, texture3);
+
+       glUniform1i(location3, 0);
+        glDrawArrays(GL_QUADS,0,4);
+
+
+
+
+        glBindVertexArray(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+           if (event.type == sf::Event::MouseButtonPressed)
+	   {
+		    if (event.mouseButton.button == sf::Mouse::Left)
+		    {
+			//std::cout << "the right button was pressed" << std::endl;
+			std::cout<< "x : " << event.mouseButton.x << std::endl; 
+			std::cout<< "y : " << event.mouseButton.y << std::endl; 
+			if(event.mouseButton.x >660 && 	event.mouseButton.x<1010 && event.mouseButton.y >220 && event.mouseButton.y < 460){			
+				nomKartJoueur = "application/KAF/kart2.KAF";
+				nomKartIA = "application/KAF/kart3.KAF";
+				nomKartIA2 = "application/KAF/kart1.KAF";
+				choixKart = false;
+			}else if(event.mouseButton.x >680 && 	event.mouseButton.x<1010 && event.mouseButton.y >490 && event.mouseButton.y < 740){
+				nomKartJoueur = "application/KAF/kart1.KAF";
+				nomKartIA = "application/KAF/kart2.KAF";
+				nomKartIA2 = "application/KAF/kart3.KAF";
+				choixKart = false;
+			}else if(event.mouseButton.x >300 && 	event.mouseButton.x<670 && event.mouseButton.y >490 && event.mouseButton.y < 740){
+				nomKartJoueur = "application/KAF/kart3.KAF";
+				nomKartIA = "application/KAF/kart1.KAF";
+				nomKartIA2 = "application/KAF/kart2.KAF";
+				choixKart = false;
+			}	
+		    }
+	   } 
+	   if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        window.display();
+    }
+
+    glDeleteTextures(1,&texture);
+
+sf::Image image4;
+    if (!image4.loadFromFile("application/data/commandes.png"))
+    {
+        std::cout << "error" <<std::endl;
+    }
+    GLuint texture4;
+    glGenTextures(1,  &texture4);
+    glBindTexture(GL_TEXTURE_2D, texture4);
+    glTexImage2D( GL_TEXTURE_2D , 0,GL_RGBA, image4.getSize().x,  image4.getSize().y,  0,  GL_RGBA,  GL_UNSIGNED_BYTE,  image4.getPixelsPtr());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    vbo.bind(); // bindage
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices),vertices,GL_STATIC_DRAW ); // envoi des données
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+
+    //glimac::VAO vao;
+    vao.bind();
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+
+
+    vbo.bind(); // bindage
+    glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE, sizeof(glimac::Vertex2DUV),(const void*) offsetof(glimac::Vertex2DUV, x)  );
+    glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,sizeof(glimac::Vertex2DUV),(const void*) offsetof(glimac::Vertex2DUV, u) );
+
+
+
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glBindVertexArray(0);
+
+    while (commandes == true)
+    {
+
+
+
+        // Rendering code goes here
+        glClear(GL_COLOR_BUFFER_BIT);
+
+         vao.bind();
+        glBindTexture(GL_TEXTURE_2D, texture4);
+
+       glUniform1i(location3, 0);
+        glDrawArrays(GL_QUADS,0,4);
+
+
+
+
+        glBindVertexArray(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+           if (event.type == sf::Event::MouseButtonPressed)
+	   {
+		    if (event.mouseButton.button == sf::Mouse::Left)
+		    {
+			if(event.mouseButton.x >660 && 	event.mouseButton.x<1010 && event.mouseButton.y >220 && event.mouseButton.y < 460){			
+				commandes = false;
+			}	
+		    }
+	   } 
+	   if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        window.display();
+    }
+
+    glDeleteTextures(1,&texture);
   //On active le test de profondeur dans OpenGL
   glEnable(GL_DEPTH_TEST);
 
   //-----------------------------------------------------
+  // Initialisation du generateur de nbre aleatoire
+  srand(time(nullptr));
 
+  // Random entre 1 et 5
+  int rand_music = (rand() % 5) + 1;
+
+  // Creation variables pour chemin du fichier
+  std::string way_start = "application/music/";
+  std::string way_end = ".ogg";
+  std::string way_access;
+
+  std::stringstream sstm;
+  sstm << way_start << rand_music << way_end;
+  way_access = sstm.str();
+
+  // Open music
+  sf::Music music;
+  if (!music.openFromFile(way_access)) return -1;
 
 
 
   /* initialisation de la map */
   Map map;
 
-  LoadKAFMap(&map,"KAF/map.KAF");
-  LoadKAFCollision(&map,"KAF/mapFriction.KAF");
-  LoadKAFCheckpoint(&map, "KAF/mapCheckpoint.KAF");
+  LoadKAFMap(&map,nomMap);
+  LoadKAFCollision(&map,"application/KAF/mapFriction.KAF");
+  LoadKAFCheckpoint(&map, "application/KAF/mapCheckpoint.KAF");
+std::cout<< map.getChemin()<<std::endl;
   int numPoint = 0;
   Point3D current_point = map.trajet[0];
 
@@ -60,13 +439,15 @@ int main() {
   kartDuJoueur.etatFreinage = false;
   kartDuJoueur.updatePosition(map.getLigneDepartPosition());
   kartDuJoueur.updateOrientation(map.getLigneDepartAngle());
-  LoadKAFKart(&kartDuJoueur,"KAF/kart2.KAF");
+  LoadKAFKart(&kartDuJoueur,nomKartJoueur);
 
   //Création des kart des autres joueurs (IA)
   IA IA1;
-  IA1.updatePosition(map.getLigneDepartPosition());
+  IA1.updatePosition(map.getLigneDepartPosition()+glm::vec3(0.f,0.f,2.f));
   IA1.updateOrientation(map.getLigneDepartAngle());
-  IA1.setFalseTargetCalculate();
+
+  float current_angle = IA1.angleDirection;
+  glm::vec3 current_position = IA1.getPosition();
 
   //initialisation du world3D, qui contiendra tous les Mesh
   worldGraphique world3D;
@@ -74,7 +455,7 @@ int main() {
 
  // création du shader de base
  glimac::ShaderProgram shaderProgram;
- shaderProgram.loadProgram("shaders/Simple3DVS.glsl","shaders/SimpleFS.glsl");
+ shaderProgram.loadProgram("application/shaders/Simple3DVS.glsl","application/shaders/SimpleFS.glsl");
  shaderProgram.use();
 
    //pour la camera
@@ -83,14 +464,11 @@ int main() {
 
   sf::Clock clock;
 
-  sf::Music music; if (!music.openFromFile("music/1.ogg")) return -1;
 
-
-  //music.play();
+  music.play();
 
 
   //--------- BOUCLE DE JEU ---------------
-  bool demandeAQuitter = false;
   do
   {
     //-----------------RENDU 3D-----------------------
@@ -138,7 +516,8 @@ int main() {
     kartDuJoueur.mettreAJour(elapsed);
     //IA1.mettreAJour(elapsed);
 
-   IA1.setPositionIA(elapsed, map);
+
+    IA1.setPositionIA(elapsed, map);
 
 
 

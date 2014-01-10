@@ -20,6 +20,7 @@ std::cout<< currentpositionkart[0]<<","<<currentpositionkart[2]<<std::endl;
     /* si on est dans une zone */
    if(friction==true){
         kartDuJoueur->stopFreiner();
+	std::cout << "fegdfhr" << std::endl;
     }
     /* si on y est pas encore ou qu'on en sort*/
   else if(friction==false){
