@@ -49,9 +49,8 @@ int main() {
   Map map;
 
   LoadKAFMap(&map,"KAF/map.KAF");
-  LoadKAFCollision(&map,"KAF/test.KAF");
+  LoadKAFCollision(&map,"KAF/mapFriction.KAF");
   LoadKAFCheckpoint(&map, "KAF/mapCheckpoint.KAF");
-std::cout<< map.getChemin()<<std::endl;
   int numPoint = 0;
   Point3D current_point = map.trajet[0];
 
@@ -65,11 +64,9 @@ std::cout<< map.getChemin()<<std::endl;
 
   //Création des kart des autres joueurs (IA)
   IA IA1;
-  IA1.updatePosition(map.getLigneDepartPosition()+glm::vec3(0.f,0.f,2.f));
+  IA1.updatePosition(map.getLigneDepartPosition());
   IA1.updateOrientation(map.getLigneDepartAngle());
-
-  float current_angle = IA1.angleDirection;
-  glm::vec3 current_position = IA1.getPosition();
+  IA1.setFalseTargetCalculate();
 
   //initialisation du world3D, qui contiendra tous les Mesh
   worldGraphique world3D;
@@ -141,8 +138,7 @@ std::cout<< map.getChemin()<<std::endl;
     kartDuJoueur.mettreAJour(elapsed);
     //IA1.mettreAJour(elapsed);
 
-
-    IA1.setPositionIA(elapsed, map);
+   IA1.setPositionIA(elapsed, map);
 
 
 

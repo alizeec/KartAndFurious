@@ -125,6 +125,14 @@ public:
 class IA : public Kart{
     public:
     void setPositionIA(sf::Time elapsedTimeInSecond, Map map);
+    void setTrueTargetCalculate();
+    void setFalseTargetCalculate();
+
+    void setAngle(float newangle);
+
+private:
+    bool targetCalculate;
+    float angleIA;
 };
 
 #endif

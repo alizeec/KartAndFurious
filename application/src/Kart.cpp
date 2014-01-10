@@ -152,6 +152,26 @@ const glm::quat& Kart::getOrientation() const
   {return orientation;}
 
 
+
+
+
+
+/********************************* IA ********************************************************/
+void IA::setTrueTargetCalculate(){
+    this->targetCalculate=true;
+}
+
+void IA::setFalseTargetCalculate(){
+    this->targetCalculate=false;
+}
+
+void IA::setAngle(float newangle){
+    this->angleIA = newangle;
+}
+
+
+
+
 void IA::setPositionIA(sf::Time elapsedTimeInSecond, Map map){
     const glm::vec3 directionInitiale = glm::vec3(0.f, 0.f, -1.f);
 
@@ -164,19 +184,27 @@ void IA::setPositionIA(sf::Time elapsedTimeInSecond, Map map){
 
 
    glm::vec3 kartToCheckpoint=glm::vec3(x,y,z);
-   std::cout<<"position ia"<<vecdirecteur[0]<<","<<vecdirecteur[1]<<","<<vecdirecteur[2]<<std::endl;
 
-   //angleDirection= glm::orientedAngle(vecdirecteur,kartToCheckpoint,glm::vec3(0.f,1.f,0.f));
+   //boucle pour qu'il ne recalcule pas l'angle tant qu'il n'est pas arrivé à un noeud
+   if(this->targetCalculate==false){
+
    float produitscalaire= kartToCheckpoint[0]*vecdirecteur[0]+kartToCheckpoint[1]*vecdirecteur[1]+kartToCheckpoint[2]*vecdirecteur[2];
-   //std::cout<<"produit scalaire"<<sqrt(kartToCheckpoint[0]*kartToCheckpoint[0]+kartToCheckpoint[1]*kartToCheckpoint[1]+kartToCheckpoint[2]*kartToCheckpoint[2])<<std::endl;
-    angleDirection= acos(produitscalaire/51.f);
-    angleDirection = angleDirection*(180/M_PI);
-    std::cout<<"angle"<<angleDirection<<std::endl;
-    //angleDirection = 45.f;
+   float result = produitscalaire/sqrt(kartToCheckpoint[0]*kartToCheckpoint[0]+kartToCheckpoint[1]*kartToCheckpoint[1]+kartToCheckpoint[2]*kartToCheckpoint[2]);
 
-    avance();
+   //arrondissement à 2 decimale sinon acos est pas content
+    result= result*100;
+    result =floor(result);
+    result = result/100;
+
+    setTrueTargetCalculate();
+    setAngle(result);
+}
+
+    angleDirection= acos(this->angleIA);
+   angleDirection = angleDirection*(180/M_PI);
+
+   avance();
     mettreAJour(elapsedTimeInSecond);
-    //std::cout<<"vec directeur"<<kartToCheckpoint[0]<<","<<kartToCheckpoint[2]<<std::endl;
     if (fabs(this->getPosition()[0]-map.trajet[0].x)<4.f && fabs(this->getPosition()[2]-map.trajet[0].z)<4.f){
         stopAvancer();
     }
