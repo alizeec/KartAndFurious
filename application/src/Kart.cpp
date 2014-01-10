@@ -211,16 +211,12 @@ void IA::setPositionIA(sf::Time elapsedTimeInSecond, Map map){
     setAngle(this->angleIA+result);
 }
 
-   std::cout<<"angle before"<<angleIA<<std::endl;
 
    angleDirection = acos(this->angleIA);
    angleDirection += angleDirection*(180/M_PI);
-   std::cout<<"angle after"<<angleIA<<std::endl;
 
-   //avance();
     mettreAJour(elapsedTimeInSecond);
     if (fabs(this->getPosition()[0]-map.trajet[getCursor()].x)<4.f && fabs(this->getPosition()[2]-map.trajet[getCursor()].z)<4.f){
-        std::cout<<"yep"<<std::endl;
         stopAvancer();
         incrementCursor();
         setFalseTargetCalculate();

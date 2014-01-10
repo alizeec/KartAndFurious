@@ -30,13 +30,13 @@
 int main() {
   const size_t WINDOW_WIDTH = 1024;
   const size_t WINDOW_HEIGHT = 768;
-  bool PointX = false;
-  bool PointZ = false;
   bool intro = true;
   bool choixMap = true;
   bool choixKart = true;
   bool commandes = true;
   std::string nomMap;
+  std::string nomFriction ;
+  std::string nomCheckpoint;
   std::string nomKartJoueur;
   std::string nomKartIA;
   std::string nomKartIA2;
@@ -214,9 +214,14 @@ int main() {
 		    {
 			if(event.mouseButton.x >640 && 	event.mouseButton.x<930 && event.mouseButton.y >247 && event.mouseButton.y < 484){			
                 nomMap = "KAF/map.KAF";
+                nomFriction = "KAF/mapFriction.KAF";
+                nomCheckpoint = "KAF/mapCheckpoint.KAF";
+
 				choixMap = false;
 			}else if(event.mouseButton.x >373 && 	event.mouseButton.x<688 && event.mouseButton.y >468 && event.mouseButton.y < 702){
-                nomMap = "KAF/map.KAF";
+                nomMap = "KAF/map2.KAF";
+                nomFriction = "KAF/mapFriction2.KAF";
+                nomCheckpoint = "KAF/mapCheckpoint2.KAF";
 				choixMap = false;
 			}	
 		    }
@@ -426,8 +431,8 @@ sf::Image image4;
   Map map;
 
   LoadKAFMap(&map,nomMap);
-  LoadKAFCollision(&map,"KAF/mapFriction.KAF");
-  LoadKAFCheckpoint(&map, "KAF/mapCheckpoint.KAF");
+  LoadKAFCollision(&map,nomFriction);
+  LoadKAFCheckpoint(&map, nomCheckpoint);
 std::cout<< map.getChemin()<<std::endl;
   int numPoint = 0;
   Point3D current_point = map.trajet[0];
@@ -467,7 +472,6 @@ std::cout<< map.getChemin()<<std::endl;
 
 
   music.play();
-
 
   //--------- BOUCLE DE JEU ---------------
   do
@@ -571,9 +575,7 @@ std::cout<< map.getChemin()<<std::endl;
               currentCamera[2]=-2.f;
           }
 
-          else if (e.key.code== sf::Keyboard::A){
-              std::cout<<"kartdujouer"<<kartDuJoueur.getPosition()[0]<<","<<kartDuJoueur.getPosition()[2]<<std::endl;
-          }
+
 
 
 

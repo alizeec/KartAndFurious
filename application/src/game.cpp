@@ -19,6 +19,7 @@ const glm::vec3& currentpositionkart = kartDuJoueur->getPosition();
     /* si on est dans une zone */
    if(friction==true){
         kartDuJoueur->stopFreiner();
+
     }
     /* si on y est pas encore ou qu'on en sort*/
   else if(friction==false){
