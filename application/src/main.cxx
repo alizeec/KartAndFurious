@@ -37,6 +37,8 @@ int main() {
   bool choixKart = true;
   bool commandes = true;
   std::string nomMap;
+  std::string nomFriction ;
+  std::string nomCheckpoint;
   std::string nomKartJoueur;
   std::string nomKartIA;
   std::string nomKartIA2;
@@ -432,8 +434,8 @@ sf::Image image4;
   Map map;
 
   LoadKAFMap(&map,nomMap);
-  LoadKAFCollision(&map,"application/KAF/mapFriction.KAF");
-  LoadKAFCheckpoint(&map, "application/KAF/mapCheckpoint.KAF");
+  LoadKAFCollision(&map,nomFriction);
+  LoadKAFCheckpoint(&map, nomCheckpoint);
 std::cout<< map.getChemin()<<std::endl;
   int numPoint = 0;
   Point3D current_point = map.trajet[0];
@@ -577,9 +579,7 @@ std::cout<< map.getChemin()<<std::endl;
               currentCamera[2]=-2.f;
           }
 
-          else if (e.key.code== sf::Keyboard::A){
-              std::cout<<"kartdujouer"<<kartDuJoueur.getPosition()[0]<<","<<kartDuJoueur.getPosition()[2]<<std::endl;
-          }
+
 
 
 
