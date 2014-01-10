@@ -169,6 +169,17 @@ void IA::setAngle(float newangle){
     this->angleIA = newangle;
 }
 
+void IA::incrementCursor(){
+    this->Cursor ++;
+}
+int IA::getCursor(){
+    return this->Cursor;
+}
+
+void IA::initCursor(){
+    this->Cursor=0;
+}
+
 
 
 
@@ -177,9 +188,9 @@ void IA::setPositionIA(sf::Time elapsedTimeInSecond, Map map){
 
 
     glm::vec3 vecdirecteur= glm::normalize(glm::toMat3(orientation)*directionInitiale);
-    float x= map.trajet[0].x-(this->getPosition()[0]);
-    float y= map.trajet[0].y-(this->getPosition()[1]);
-    float z= map.trajet[0].z-(this->getPosition()[2]);
+    float x= map.trajet[getCursor()].x-(this->getPosition()[0]);
+    float y= map.trajet[getCursor()].y-(this->getPosition()[1]);
+    float z= map.trajet[getCursor()].z-(this->getPosition()[2]);
 
 
 
@@ -197,15 +208,24 @@ void IA::setPositionIA(sf::Time elapsedTimeInSecond, Map map){
     result = result/100;
 
     setTrueTargetCalculate();
-    setAngle(result);
+    setAngle(this->angleIA+result);
 }
 
-    angleDirection= acos(this->angleIA);
-   angleDirection = angleDirection*(180/M_PI);
+   std::cout<<"angle before"<<angleIA<<std::endl;
 
-   avance();
+   angleDirection = acos(this->angleIA);
+   angleDirection += angleDirection*(180/M_PI);
+   std::cout<<"angle after"<<angleIA<<std::endl;
+
+   //avance();
     mettreAJour(elapsedTimeInSecond);
-    if (fabs(this->getPosition()[0]-map.trajet[0].x)<4.f && fabs(this->getPosition()[2]-map.trajet[0].z)<4.f){
+    if (fabs(this->getPosition()[0]-map.trajet[getCursor()].x)<4.f && fabs(this->getPosition()[2]-map.trajet[getCursor()].z)<4.f){
+        std::cout<<"yep"<<std::endl;
         stopAvancer();
+        incrementCursor();
+        setFalseTargetCalculate();
+    }else{
+        avance();
     }
+
 }

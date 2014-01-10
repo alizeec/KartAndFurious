@@ -9,7 +9,6 @@ int sizeTabRallentissement = map.ralentissement.getRallentissementCoord().size()
 std::vector <Point3D> positionfriction = map.ralentissement.getRallentissementCoord();
 std::vector <Point3D> sizefriction = map.ralentissement.getRallentissementSize();
 const glm::vec3& currentpositionkart = kartDuJoueur->getPosition();
-std::cout<< currentpositionkart[0]<<","<<currentpositionkart[2]<<std::endl;
    bool friction=false;
     for (int i=0;i<sizeTabRallentissement; ++i){
 
@@ -20,7 +19,6 @@ std::cout<< currentpositionkart[0]<<","<<currentpositionkart[2]<<std::endl;
     /* si on est dans une zone */
    if(friction==true){
         kartDuJoueur->stopFreiner();
-	std::cout << "fegdfhr" << std::endl;
     }
     /* si on y est pas encore ou qu'on en sort*/
   else if(friction==false){
