@@ -24,21 +24,24 @@ const glm::vec3& currentpositionkart = kartDuJoueur->getPosition();
     /* si on y est pas encore ou qu'on en sort*/
   else if(friction==false){
         kartDuJoueur->freiner();
+
     }
 }
 
 
-void detectionCheckpoints(Kart kartDuJoueur, Map* map){
+void detectionCheckpoints(Kart* kartDuJoueur, Map* map){
 int sizeTabCheckpoint = map->checkpoint.getCheckpointCoord().size();
 std::vector <Point3D> positionCheckpoint = map->checkpoint.getCheckpointCoord();
 std::vector <float> sizeCheckpoint = map->checkpoint.getCheckpointRadius();
 std::vector<bool> listeCheckpoint = map->checkpoint.getIsValidated();
-const glm::vec3& currentpositionkart = kartDuJoueur.getPosition();
+const glm::vec3& currentpositionkart = kartDuJoueur->getPosition();
 
 
 
 if(currentpositionkart[0]>=(positionCheckpoint[0].x-(sizeCheckpoint[0]/2)) && currentpositionkart[0]<=(positionCheckpoint[0].x+(sizeCheckpoint[0]/2)) && currentpositionkart[2]>=(positionCheckpoint[0].z-(sizeCheckpoint[0]/2)) && currentpositionkart[2]<=(positionCheckpoint[0].z+(sizeCheckpoint[0]/2)) && listeCheckpoint[1]==true && listeCheckpoint[2]==true && listeCheckpoint[3]==true && listeCheckpoint[4]==true){
     map->checkpoint.setTrue(0);
+    kartDuJoueur->arived=true;
+
  }
 
     for (int i=1;i<sizeTabCheckpoint; ++i){
@@ -47,4 +50,12 @@ if(currentpositionkart[0]>=(positionCheckpoint[0].x-(sizeCheckpoint[0]/2)) && cu
 
             }
         }
+}
+
+void Game::initIsOver(){
+    isOver=false;
+}
+
+void Game::setTrueIsOver(){
+    isOver=true;
 }

@@ -75,8 +75,7 @@ void Mesh::loadFromFile(const std::string& cheminFichier)
     std::vector<glimac::Vertex3D> vertices;
     vertices.reserve(mesh->mNumVertices);
 
-    //On stocke un a un chaque vertices dans le vector (traduction assimp format => FatAndFurious format)
-    //Note: On stocke les coordonnées de texture mais pour l'instant elles ne sont pas exploitées (à venir)
+    //On stocke un a un chaque vertices dans le vector (traduction assimp format => KAF format)
     for (unsigned int j = 0; j < mesh->mNumVertices; ++j)
     {
       glimac::Vertex3D current;
@@ -123,7 +122,6 @@ void Mesh::mettreAJour()
 void Mesh::afficher(const glimac::ShaderProgram& shaderProgram) const
 {
   //Activer les bons shaders, et afficher l'objet comme il faut en fonction de la caméra
-  //(peut etre que cette méthode aura des paramètres)
 
   GLint modelIndex = shaderProgram.getUniformIndex("model");
   shaderProgram.setUniform(modelIndex, modelMatrix);

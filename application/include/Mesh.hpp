@@ -34,8 +34,6 @@ private:
   glm::mat4 modelMatrix;
   /* Implémentation basique :
    * pour un VBO à l'indice 'i' correspond un VAO et un material à l'indice 'i'.
-   * A voir plus tard si faut pas faire un truc plus proche, pour l'instant je me suis
-   * concentré sur le résultat...
    * Utilisation des pointeurs parce que l'allocation des VBO/VAO est chiante
    * à gérer.
    */

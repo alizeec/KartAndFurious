@@ -108,6 +108,7 @@ public:
   const glm::vec3& getPosition() const;
   const glm::quat& getOrientation() const;
   Specifications specifications;
+  bool arived=false;
 
 
 //private:
@@ -124,13 +125,14 @@ public:
 
 class IA : public Kart{
     public:
-    void setPositionIA(sf::Time elapsedTimeInSecond, Map map);
+    int setPositionIA(sf::Time elapsedTimeInSecond, Map map);
     void setTrueTargetCalculate();
     void setFalseTargetCalculate();
     void incrementCursor();
     int getCursor();
     void initCursor();
     void setAngle(float newangle);
+    bool arived;
 
 //private:
     bool targetCalculate;

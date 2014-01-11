@@ -66,6 +66,7 @@ bool LoadKAFMap(Map* map,const std::string&  cheminMap){
       map->setChemin(chemin);
       map->setIA(nomIA);
       map->setLigneDepart(StartCoordx,StartCoordy,StartCoordz,StartAngle);
+      map->setNbPoints(nbPoints);
 
 
       /*Récupération des coordonnées*/
